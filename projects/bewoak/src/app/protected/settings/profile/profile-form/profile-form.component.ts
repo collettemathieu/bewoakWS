@@ -81,7 +81,7 @@ export class ProfileFormComponent implements OnInit {
   */
   private getRolesFromUser(user: User): string {
     let roles: string = '',
-        _role: string;
+      _role: string;
     user.roles.forEach((role, index) => {
       switch (role) {
         case 'ADMIN':

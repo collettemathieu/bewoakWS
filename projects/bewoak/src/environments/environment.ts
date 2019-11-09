@@ -11,11 +11,11 @@ export const environment = {
     projectId: 'my-bewoak',
     storageBucket: '',
     messagingSenderId: '',
-    auth:{
+    auth: {
       baseUrl: 'https://identitytoolkit.googleapis.com/v1/'
     }
   },
-  firestore:{
+  firestore: {
     baseUrl: 'https://firestore.googleapis.com/v1/projects/my-bewoak/databases/(default)/documents/'
   }
 };

@@ -40,7 +40,7 @@ export class AuthService {
       email: email,
       password: password,
       returnSecureToken: true
-    }
+    };
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -149,14 +149,14 @@ export class AuthService {
         // Fin mise en attente
         this.loaderService.setLoading(false);
         // Retourne l'erreur à l'utilisateur
-        return this.errorService.handleError(error)
+        return this.errorService.handleError(error);
       }),
       finalize(() => {
         // Envoi d'un message
         this.toastrService.showMessage({
-           type: 'success',
-           message: 'Utilisateur enregistré'
-         });
+          type: 'success',
+          message: 'Utilisateur enregistré'
+        });
         // Fin mise en attente
         this.loaderService.setLoading(false);
       })
@@ -174,7 +174,7 @@ export class AuthService {
 
     return this.userService.update(user).pipe(
       tap(user => this.user.next(user)),
-      tap( _ => this.toastrService.showMessage({
+      tap(_ => this.toastrService.showMessage({
         type: 'success',
         message: 'Votre profil a bien été enregistré'
       })),

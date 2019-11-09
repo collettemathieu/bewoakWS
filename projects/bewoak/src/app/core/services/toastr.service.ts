@@ -13,9 +13,9 @@ export class ToastrService {
   constructor() { }
 
   /* 
-    Affiche un message d'avertissement à l'utilisateur
-    @param toastr Toastr le type et le message à envoyer à l'utilisateur
-    @return void
+  *  Affiche un message d'avertissement à l'utilisateur
+  *  @param toastr Toastr le type et le message à envoyer à l'utilisateur
+  *  @return void
   */
   public showMessage(toastr: Toastr): void {
     toastr.id = this.generateId();
@@ -39,6 +39,6 @@ export class ToastrService {
     // Convert it to base 36 (numbers + letters), and grab the first 9 characters
     // after the decimal.
     return '_' + Math.random().toString(36).substr(2, 9);
-  };
+  }
 
 }

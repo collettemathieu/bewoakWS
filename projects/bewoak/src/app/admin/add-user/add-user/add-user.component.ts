@@ -15,13 +15,13 @@ export class AddUserComponent implements OnInit {
   private addUserForm: FormGroup;
   private roles: Array<string> = ['USER', 'EXPERT', 'ADMIN'];
   private config = {
-    displayKey:"description", //if objects array passed which key to be displayed defaults to description
-    search:true, //true/false for the search functionlity defaults to false,
+    displayKey: "description", //if objects array passed which key to be displayed defaults to description
+    search: true, //true/false for the search functionlity defaults to false,
     height: 'auto', //height of the list so that if there are more no of items it can show a scroll defaults to auto. With auto height scroll will never appear
-    placeholder:'Sélectionner les roles', // text to be displayed when no item is selected defaults to Select,
+    placeholder: 'Sélectionner les roles', // text to be displayed when no item is selected defaults to Select,
     moreText: 'en plus', // text to be displayed whenmore than one items are selected like Option 1 + 5 more
     noResultsFound: 'Aucun résultat trouvé !', // text to be displayed when no items are found while searching
-    searchPlaceholder:'Rechercher', // label thats displayed in search input,
+    searchPlaceholder: 'Rechercher', // label thats displayed in search input,
   };
 
   constructor(private fb: FormBuilder,
@@ -34,7 +34,7 @@ export class AddUserComponent implements OnInit {
     this.addUserForm = this.createForm();
   }
 
-  private createForm(): FormGroup{
+  private createForm(): FormGroup {
     // Contrôles demandés
     const controlsAsked = ['firstname', 'lastname', 'email', 'roleControl'];
     // Récupération du formulaire standard de l'entité User
@@ -42,7 +42,7 @@ export class AddUserComponent implements OnInit {
   }
 
   submitForm(): void {
-    if(this.addUserForm.valid){
+    if (this.addUserForm.valid) {
       const options = {
         firstname: this.firstname.value,
         lastname: this.lastname.value,

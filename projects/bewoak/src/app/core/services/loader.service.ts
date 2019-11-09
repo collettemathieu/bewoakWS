@@ -11,10 +11,10 @@ export class LoaderService {
 
   constructor() { }
 
-  /* 
-    Active ou désactive le loader sur la page
-    @param isLoading bool
-    @return void
+  /*
+  *  Active ou désactive le loader sur la page
+  *  @param isLoading bool
+  *  @return void
   */
   public setLoading(isLoading: boolean): void {
     this.isLoading.next(isLoading);
