@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="row">
+        <form class="col-4 mx-auto mt-5 mb-5" 
+        novalidate (ngSubmit)="submitForm()" 
+        [formGroup]="loginForm">
+            <div class="form-group">
+                <label for="email">Adresse électronique :</label>
+                <input type="email" class="form-control" id="email" 
+                formControlName="email"
+                autocomplete="false"
+                autocorrect="false"
+                >
+                <small *ngIf="email.errors && email.dirty" class="form-text text-muted">
+                    <span [hidden]="!email.errors.required">
+                        Une adresse électronique est requise.
+                    </span>
+                    <span [hidden]="!email.errors.email">
+                        L'adresse électronique renseignée n'est pas valide.
+                    </span>
+                </small>
+            </div>
+            <div class="form-group">
+                <label for="pwd">Mot de passe :</label>
+                <input type="password" class="form-control" id="pwd" 
+                formControlName="password"
+                autocomplete="false"
+                autocorrect="false"
+                >
+            </div>
+            <small *ngIf="password.errors && password.dirty" class="form-text text-muted">
+                <span [hidden]="!password.errors.required">
+                    Un mot de passe est requis.
+                </span>
+                <span [hidden]="!password.errors.minlength">
+                    Votre mot de passe doit comporter plus de 8 caractères.
+                </span>
+            </small>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox"> Se souvenir de moi !
+                </label>
+            </div>
+            <button type="submit" 
+            class="btn btn-primary float-right" 
+            [ngClass]="{'btn-success':loginForm.valid, 'btn-default':!loginForm.valid}"
+            [disabled]="!loginForm.valid"
+            >Valider</button>
+        </form>
+    </div>
+</div>
