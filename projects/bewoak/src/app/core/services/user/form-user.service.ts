@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 })
 export class FormUserService {
 
-  private form: FormGroup = this.fb.group({});
+  private form: FormGroup;
 
   constructor(private fb: FormBuilder) { }
 
@@ -14,7 +14,8 @@ export class FormUserService {
   * Retourne le formGroup pour l'entité User en fonction des contrôles demandés
   * @return FormGroup
   */
-  public getFormGroup(controls: string[]): FormGroup {
+  public generateFormGroup(controls: string[]): FormGroup {
+    this.form = this.fb.group({});
     controls.forEach((control) => {
       switch (control) {
         case 'firstname':

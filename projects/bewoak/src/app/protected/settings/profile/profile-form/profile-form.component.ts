@@ -58,7 +58,7 @@ export class ProfileFormComponent implements OnInit {
     // Contrôles demandés
     const controlsAsked = ['firstname', 'lastname', 'jobBackground'];
     // Récupération du formulaire standard de l'entité User
-    return this.formUserService.getFormGroup(controlsAsked);
+    return this.formUserService.generateFormGroup(controlsAsked);
   }
 
   /*

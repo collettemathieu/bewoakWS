@@ -38,7 +38,7 @@ export class AddUserComponent implements OnInit {
     // Contrôles demandés
     const controlsAsked = ['firstname', 'lastname', 'email', 'roleControl'];
     // Récupération du formulaire standard de l'entité User
-    return this.formUserService.getFormGroup(controlsAsked);
+    return this.formUserService.generateFormGroup(controlsAsked);
   }
 
   submitForm(): void {
