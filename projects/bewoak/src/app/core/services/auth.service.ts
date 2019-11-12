@@ -82,10 +82,11 @@ export class AuthService {
   *  Méthode permettant l'authentification automatique depuis firebase de l'utilisateur
   */
   automaticLogin(): void {
-    const userId: string = localStorage.getItem('userId') || '';
-    const jwt: string = localStorage.getItem('token') || '';
+    const data = this.getDataFromLocalStorage();
+    const userId: string = data.id || '';
+    const jwt: string = data.token || '';
     const now = new Date().getTime();
-    const expirationDate: number = +localStorage.getItem('expirationDate') || now;
+    const expirationDate: number = +data.expirationDate || now;
 
     if (!jwt) {
       return;
@@ -187,9 +188,7 @@ export class AuthService {
   *  Méthode permettant la déconnexion de l'utilisateur
   */
   logout(): void {
-    localStorage.removeItem('expirationDate');
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
+    this.removeDataFromLocalStorage();
     this.user.next(null);
     this.router.navigate(['/login']);
   }
@@ -209,10 +208,11 @@ export class AuthService {
   *  Méthode permettant de sauvegarder en local storage les données utilisateurs
   */
   private saveAuthData(userId: string, jwt: string): void {
-    const now = new Date();
-    localStorage.setItem('expirationDate', (now.getTime() + 3600 * 1000).toString());
-    localStorage.setItem('token', jwt);
-    localStorage.setItem('userId', userId);
+    this.setDataFromLocalStorage({
+      id: userId,
+      token: jwt,
+      date: new Date()
+    });
   }
 
 
@@ -222,4 +222,46 @@ export class AuthService {
   public getCurrentUser(): User {
     return this.user.getValue();
   }
+
+  /* 
+  *  Méthode permettant de récupérer les informations du local storage
+  */
+  public getDataFromLocalStorage(): {
+    id: string,
+    token: string,
+    expirationDate: number
+  } {
+    const userId: string = localStorage.getItem('userId') || '';
+    const jwt: string = localStorage.getItem('token') || '';
+    const expirationDate: number = +localStorage.getItem('expirationDate') || 0;
+
+    return {
+      id: userId,
+      token: jwt,
+      expirationDate: expirationDate
+    }
+  }
+
+  /* 
+  *  Méthode permettant de modifier les informations du local storage
+  */
+  public setDataFromLocalStorage(data: {
+    id: string,
+    token: string,
+    date: Date
+  }): void {
+    localStorage.setItem('expirationDate', (data.date.getTime() + 3600 * 1000).toString());
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('userId', data.id);
+  }
+
+  /* 
+  *  Méthode permettant de supprimer les informations du local storage
+  */
+  public removeDataFromLocalStorage(): void {
+    localStorage.removeItem('expirationDate');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+  }
+
 }

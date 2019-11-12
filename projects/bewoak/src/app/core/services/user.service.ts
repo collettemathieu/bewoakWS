@@ -64,7 +64,7 @@ export class UserService {
   }
 
   /* 
-  * Méthode permettant d'enregistrer les modifications d'un utilisateur
+  * Méthode permettant d'enregistrer des modifications partielles d'un utilisateur
   * @param user: User
   * @return Observable<User>
   */
@@ -72,11 +72,10 @@ export class UserService {
     // Configuration
     const url = `${environment.firestore.baseUrl}users/${user.id}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
     const data = this.getDataUserForFirestore(user);
-    const jwt = localStorage.getItem('token');
+    //const jwt = localStorage.getItem('token');
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
+        'Content-Type': 'application/json'
       })
     };
 
