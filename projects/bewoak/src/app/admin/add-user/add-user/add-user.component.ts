@@ -15,20 +15,30 @@ export class AddUserComponent implements OnInit {
   private addUserForm: FormGroup;
   private roles: Array<string> = ['USER', 'EXPERT', 'ADMIN'];
   private config = {
-    displayKey: "description", //if objects array passed which key to be displayed defaults to description
-    search: true, //true/false for the search functionlity defaults to false,
-    height: 'auto', //height of the list so that if there are more no of items it can show a scroll defaults to auto. With auto height scroll will never appear
-    placeholder: 'Sélectionner les roles', // text to be displayed when no item is selected defaults to Select,
-    moreText: 'en plus', // text to be displayed whenmore than one items are selected like Option 1 + 5 more
-    noResultsFound: 'Aucun résultat trouvé !', // text to be displayed when no items are found while searching
-    searchPlaceholder: 'Rechercher', // label thats displayed in search input,
+    // if objects array passed which key to be displayed defaults to description
+    displayKey: 'description',
+    // true/false for the search functionlity defaults to false
+    search: true,
+    // height of the list so that if there are more no of items it can show
+    // a scroll defaults to auto. With auto height scroll will never appear
+    height: 'auto',
+    // text to be displayed when no item is selected defaults to Select
+    placeholder: 'Sélectionner les roles',
+    // text to be displayed whenmore than one items are selected like Option 1 + 5 more
+    moreText: 'en plus',
+    // text to be displayed when no items are found while searching
+    noResultsFound: 'Aucun résultat trouvé !',
+    // label thats displayed in search input
+    searchPlaceholder: 'Rechercher',
   };
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private userPasswordService: UserPasswordService,
-    private formUserService: FormUserService) { }
+    private formUserService: FormUserService
+  ) { }
 
   ngOnInit() {
     this.addUserForm = this.createForm();

@@ -9,18 +9,18 @@ import { map } from 'rxjs/operators';
 })
 export class RoleAdminGuard implements CanActivate, CanActivateChild {
 
-  constructor(private authService:AuthService){}
+  constructor(private authService: AuthService) { }
 
-  canActivate(): Observable<boolean>{
+  canActivate(): Observable<boolean> {
     return this.authService.user$.pipe(
-      map( user => {
+      map(user => {
         return !!user && user.hasRole('ADMIN');
       })
     );
   }
-  
-  canActivateChild(): Observable<boolean>{
+
+  canActivateChild(): Observable<boolean> {
     return this.canActivate();
   }
-  
+
 }

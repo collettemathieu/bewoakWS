@@ -5,7 +5,7 @@ import { take } from 'rxjs/operators';
 import { timer, Subscription } from 'rxjs';
 
 // Temps de vie d'un toastr (en ms)
-const lifeTime: number = 5000;
+const lifeTime = 5000;
 
 @Component({
   selector: 'bw-toastr',
@@ -41,21 +41,20 @@ export class ToastrComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  /* 
-  Ferme le message d'avertissement à l'utilisateur
-  @return void
+  /* Ferme le message d'avertissement à l'utilisateur
+    @return void
   */
   closeToastr(toastr: Toastr) {
     // On récupère l'index du toastr
-    let index = this.toastrs.findIndex(t => {
+    const index = this.toastrs.findIndex(t => {
       return t === toastr;
     });
     // On l'écarte du tableau
-    if (index != -1) {
+    if (index !== -1) {
       this.toastrs.splice(index, 1);
     }
   }

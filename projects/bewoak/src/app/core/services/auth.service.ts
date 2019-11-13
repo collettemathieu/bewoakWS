@@ -27,9 +27,7 @@ export class AuthService {
     private loaderService: LoaderService
   ) { }
 
-  /* 
-  *  Méthode permettant l'authentification depuis firebase de l'utilisateur
-  */
+  /* Méthode permettant l'authentification depuis firebase de l'utilisateur */
   login(email: string, password: string): Observable<User | null> {
 
     // Mise en attente

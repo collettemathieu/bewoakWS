@@ -19,8 +19,7 @@ export class RoleExpertGuard implements CanActivate, CanActivateChild {
     );
   }
 
-  canActivateChild(): Observable<boolean>{
+  canActivateChild(): Observable<boolean> {
     return this.canActivate();
   }
-
 }

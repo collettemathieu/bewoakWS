@@ -12,8 +12,8 @@ const routes: Routes = [
     canActivateChild: [AuthGuard, RoleAdminGuard],
     children: [
       {
-        path: 'addUser', 
-        loadChildren: () => import('./add-user/add-user.module').then( m => m.AddUserModule)
+        path: 'addUser',
+        loadChildren: () => import('./add-user/add-user.module').then(m => m.AddUserModule)
       }
     ]
   }

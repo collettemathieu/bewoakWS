@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private authService: AuthService
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.subscription = this.authService.user$.subscribe(
@@ -35,11 +35,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  isActive(page: string): boolean{
+  isActive(page: string): boolean {
     return this.router.isActive(page, false); // false, la route n'est pas exacte
   }
 
@@ -47,7 +47,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.router.navigate([page]);
   }
 
-  logOut(): void{
+  logOut(): void {
     this.authService.logout();
   }
 
