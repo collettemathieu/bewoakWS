@@ -38,8 +38,8 @@ export class User {
     * @param role:string
     * @return boolean
     */
-   public hasRole(role: roles): boolean{
-       return this.roles.includes(role);
-   }
+    public hasRole(role: roles): boolean {
+        return this.roles.includes(role);
+    }
 
 }

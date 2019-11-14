@@ -34,8 +34,8 @@ export class Article {
         trainingTime?: number,
         thematic?: string,
         chapters?: Chapter[],
-        level?: typeLevel, 
-        complexity?: number 
+        level?: typeLevel,
+        complexity?: number
     }) {
         this.id = options.id || '';
         this.title = options.title || '';

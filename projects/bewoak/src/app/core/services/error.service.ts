@@ -9,9 +9,9 @@ export class ErrorService {
 
   constructor(private toastrService: ToastrService) { }
 
-  public handleError(error: any): Observable<never>{
+  public handleError(error: any): Observable<never> {
     this.toastrService.showMessage({
-      type:'danger',
+      type: 'danger',
       message: error.error.error.message
     });
     return throwError(error);

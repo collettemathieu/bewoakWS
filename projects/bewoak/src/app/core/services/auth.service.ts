@@ -27,7 +27,11 @@ export class AuthService {
     private loaderService: LoaderService
   ) { }
 
-  /* Méthode permettant l'authentification depuis firebase de l'utilisateur */
+  /* Méthode permettant l'authentification depuis firebase de l'utilisateur
+    @param email:string
+    @param password: string
+    @return Observable<User | null>
+  */
   login(email: string, password: string): Observable<User | null> {
 
     // Mise en attente
@@ -35,8 +39,8 @@ export class AuthService {
 
     // Configuration de la requête
     const data = {
-      email: email,
-      password: password,
+      email,
+      password,
       returnSecureToken: true
     };
     const httpOptions = {
@@ -62,10 +66,10 @@ export class AuthService {
         // Fin mise en attente
         this.loaderService.setLoading(false);
         // Envoi d'un message d'erreur
-        return this.errorService.handleError(error)
+        return this.errorService.handleError(error);
       }),
       finalize(() => {
-        // Envoi d'un message 
+        // Envoi d'un message
         this.toastrService.showMessage({
           type: 'success',
           message: `Bienvenue ${this.user.getValue().firstname}`
@@ -76,8 +80,8 @@ export class AuthService {
     );
   }
 
-  /* 
-  *  Méthode permettant l'authentification automatique depuis firebase de l'utilisateur
+  /* Méthode permettant l'authentification automatique depuis firebase de l'utilisateur
+    @return void
   */
   automaticLogin(): void {
     const data = this.getDataFromLocalStorage();
@@ -102,9 +106,8 @@ export class AuthService {
     );
   }
 
-
-  /* 
-  *  Méthode permettant l'enregistrement de l'utilisateur sur firebase
+  /* Méthode permettant l'enregistrement de l'utilisateur sur firebase
+    @return Observable<User | null>
   */
   register(options: {
     firstname: string,
@@ -163,10 +166,9 @@ export class AuthService {
   }
 
 
-  /* 
-  * Méthode permettant d'enregistrer les modifications d'un utilisateur
-  * @param user: User
-  * @return Observable<User | null>
+  /* Méthode permettant d'enregistrer les modifications d'un utilisateur
+    @param user: User
+    @return Observable<User | null>
   */
   updateStateUser(user: User): Observable<User | null> {
     this.loaderService.setLoading(true);
@@ -182,8 +184,8 @@ export class AuthService {
     );
   }
 
-  /* 
-  *  Méthode permettant la déconnexion de l'utilisateur
+  /* Méthode permettant la déconnexion de l'utilisateur
+    @return void
   */
   logout(): void {
     this.removeDataFromLocalStorage();
@@ -191,8 +193,9 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  /* 
-  *  Méthode permettant la déconnexion automatique de l'utilisateur
+  /* Méthode permettant la déconnexion automatique de l'utilisateur
+  * @param timer: number
+  * @return void
   */
   private logOutTimer(timer: number): void {
     of(true).pipe(
@@ -202,8 +205,10 @@ export class AuthService {
     );
   }
 
-  /* 
-  *  Méthode permettant de sauvegarder en local storage les données utilisateurs
+  /* Méthode permettant de sauvegarder en local storage les données utilisateurs
+    @param userId: string
+    @param jwt: string
+    @return void
   */
   private saveAuthData(userId: string, jwt: string): void {
     this.setDataFromLocalStorage({
@@ -214,15 +219,19 @@ export class AuthService {
   }
 
 
-  /* 
-  *  Méthode permettant de récupérer l'utilisateur courant
+  /* Méthode permettant de récupérer l'utilisateur courant
+    @return User
   */
   public getCurrentUser(): User {
     return this.user.getValue();
   }
 
-  /* 
-  *  Méthode permettant de récupérer les informations du local storage
+  /* Méthode permettant de récupérer les informations du local storage
+    @return {
+    id: string,
+    token: string,
+    expirationDate: number
+    }
   */
   public getDataFromLocalStorage(): {
     id: string,
@@ -237,11 +246,16 @@ export class AuthService {
       id: userId,
       token: jwt,
       expirationDate: expirationDate
-    }
+    };
   }
 
-  /* 
-  *  Méthode permettant de modifier les informations du local storage
+  /* Méthode permettant de modifier les informations du local storage
+    @param data: {
+    id: string,
+    token: string,
+    date: Date
+    }
+    @return void
   */
   public setDataFromLocalStorage(data: {
     id: string,
@@ -253,8 +267,8 @@ export class AuthService {
     localStorage.setItem('userId', data.id);
   }
 
-  /* 
-  *  Méthode permettant de supprimer les informations du local storage
+  /* Méthode permettant de supprimer les informations du local storage
+    @return void
   */
   public removeDataFromLocalStorage(): void {
     localStorage.removeItem('expirationDate');

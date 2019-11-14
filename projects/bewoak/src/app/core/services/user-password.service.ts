@@ -6,8 +6,7 @@ export class UserPasswordService {
 
   constructor() { }
 
-  /* 
-    Génération d'un mot de passe aléatoire
+  /* Génération d'un mot de passe aléatoire
     @return string
   */
   generatePassword(): string {

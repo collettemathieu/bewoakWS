@@ -72,7 +72,6 @@ export class UserService {
     // Configuration
     const url = `${environment.firestore.baseUrl}users/${user.id}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
     const data = this.getDataUserForFirestore(user);
-    //const jwt = localStorage.getItem('token');
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
