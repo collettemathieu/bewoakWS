@@ -16,22 +16,23 @@ export class UserService {
     private errorService: ErrorService
   ) { }
 
-
-  /* 
-    Méthode pour récupérer un utilisateur depuis le firestore en fonction de son
-    identififiant après authentification
-    @param userId:string, jwt:string (token)
-    @return Observable<User|null>
-  */
+  /**
+   * Méthode pour récupérer un utilisateur depuis le firestore en fonction de son
+   * identififiant après authentification
+   * @param userId Identifiant de l'utilisateur
+   * @param jwt Id du token
+   * @return Une observable de User
+   */
   getUser(userId: string, jwt: string): Observable<User | null> {
     const url = `${environment.firestore.baseUrl}:runQuery?key=${environment.firebase.apiKey}`;
     const data = this.getStructureQuery(userId);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
+        Authorization: `Bearer ${jwt}`
       })
     };
+    console.log('ici');
     return this.httpClient.post(url, data, httpOptions).pipe(
       switchMap((data: any) => {
         return of(this.getUserFromFirestore(data[0].document.fields));
@@ -39,18 +40,19 @@ export class UserService {
     );
   }
 
-  /* 
-    Méthode pour l'enregistrement de l'utilisateur dans le firestore après authentification
-    @param user:User, jwt:string (token)
-    @return Observable<User|null>
-  */
+  /**
+   * Méthode pour l'enregistrement de l'utilisateur dans le firestore après authentification
+   * @param user Utilisateur courant
+   * @param jwt Id du token
+   * @return Une observable de User
+   */
   save(user: User, jwt: string): Observable<User | null> {
     const url = `${environment.firestore.baseUrl}users?key=${environment.firebase.apiKey}`;
     const data = this.getDataUserForFirestore(user);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
+        Authorization: `Bearer ${jwt}`
       })
     };
     return this.httpClient.post<User>(url, data, httpOptions).pipe(
@@ -63,11 +65,11 @@ export class UserService {
     );
   }
 
-  /* 
-  * Méthode permettant d'enregistrer des modifications partielles d'un utilisateur
-  * @param user: User
-  * @return Observable<User>
-  */
+  /**
+   * Méthode permettant d'enregistrer des modifications partielles d'un utilisateur
+   * @param user Utilisateur courant
+   * @return Une observable de User
+   */
   update(user: User): Observable<User | null> {
     // Configuration
     const url = `${environment.firestore.baseUrl}users/${user.id}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
@@ -80,17 +82,17 @@ export class UserService {
 
     // Enregistrement en base    
     return this.httpClient.patch<User>(url, data, httpOptions).pipe(
-      switchMap( (data: any) => {
+      switchMap((data: any) => {
         return of(this.getUserFromFirestore(data.fields))
       })
     );
   }
 
-  /* 
-    Méthode pour la transformation des données utilisateur vers le firestore
-    @param user:User
-    @return Object
-  */
+  /**
+   * Méthode pour la transformation des données utilisateur vers le firestore
+   * @param user Utilisateur courant
+   * @return Un JSON pour firestore
+   */
   private getDataUserForFirestore(user: User): Object {
     return {
       fields: {
@@ -111,11 +113,11 @@ export class UserService {
     }
   }
 
-  /* 
-    Méthode pour la transformation des données du firestore vers l'utilisateur
-    @param fields: any
-    @return User
-  */
+  /**
+   * Méthode pour la transformation des données du firestore vers l'utilisateur
+   * @param fields Champs retournés par le firestore
+   * @return Un utilisateur avec les données de firestore
+   */
   private getUserFromFirestore(fields: any): User {
     return new User({
       id: fields.id.stringValue,
@@ -130,11 +132,11 @@ export class UserService {
     });
   }
 
-  /* 
-    Méthode pour la transformation des roles de l'utilisateur vers le firestore
-    @param user: User
-    @return Object
-  */
+  /**
+   * Méthode pour la transformation des roles de l'utilisateur vers le firestore
+   * @param user Utilisateur courant
+   * @return Un tableau de {stringValue: role}
+   */
   private getRolesDataForFirestore(user: User): Object {
     const rolesUser = [];
     user.roles.forEach(role => {
@@ -145,11 +147,11 @@ export class UserService {
     return rolesUser;
   }
 
-  /* 
-  Méthode pour la transformation des roles du firestore vers l'utilisateur
-  @param user: User
-  @return Object
-*/
+  /**
+   * Méthode pour la transformation des roles du firestore vers l'utilisateur
+   * @param roles Roles de l'utilisateur courant
+   * @return Un tableau des rôles de l'utilisateur
+   */
   private getRolesDataFromFirestore(roles: any): Array<'USER' | 'EXPERT' | 'ADMIN'> {
     const rolesUser = [];
     roles.values.forEach(value => {
@@ -158,11 +160,11 @@ export class UserService {
     return rolesUser;
   }
 
-  /* 
-   Méthode pour le requêtage en base depuis firestore
-   @param userId: string
-   @return Object
- */
+  /**
+   * Méthode pour le requêtage en base depuis firestore
+   * @param userId Identifiant utilisateur
+   * @return Une requête pour firestore
+   */
   private getStructureQuery(userId: string): Object {
     return {
       'structuredQuery': {
