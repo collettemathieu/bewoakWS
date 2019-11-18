@@ -1,5 +1,5 @@
 import { NgModule, SkipSelf, Optional } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PublicModule } from '../public/public.module';
 import { ProtectedModule } from '../protected/protected.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -10,6 +10,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { ToastrComponent } from './components/toastr/toastr.component';
 import { AdminModule } from '../admin/admin.module';
 import { MessageComponent } from './components/toastr/message/message.component';
+import { JwtAuthInterceptorService } from './services/user/jwt-auth--interceptor.service';
 
 
 
@@ -21,6 +22,9 @@ import { MessageComponent } from './components/toastr/message/message.component'
     PublicModule,
     ProtectedModule,
     AdminModule,
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtAuthInterceptorService, multi: true }
   ],
   exports: [NavbarComponent, FooterComponent, PageNotFoundComponent, LoaderComponent, ToastrComponent]
 })
