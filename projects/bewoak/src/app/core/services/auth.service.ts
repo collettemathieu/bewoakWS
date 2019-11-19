@@ -4,7 +4,7 @@ import { User } from '../../shared/models/user';
 import { HttpClient, HttpHeaders, HttpBackend } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { switchMap, catchError, tap, finalize, delay } from 'rxjs/operators';
-import { UserService } from './user.service';
+import { UserService } from './user/user.service';
 import { ToastrService } from './toastr.service';
 import { ErrorService } from './error.service';
 import { LoaderService } from './loader.service';
@@ -31,18 +31,18 @@ export class AuthService {
     this.http = new HttpClient(this.handler);
   }
 
-  /* Méthode permettant l'authentification depuis firebase de l'utilisateur
-    @param email:string
-    @param password: string
-    @return Observable<User | null>
-  */
+  /**
+   * Méthode permettant l'authentification depuis firebase de l'utilisateur
+   * @param email Mail de l'utilisateur
+   * @param password Mot de passe de l'utilisateur
+   */
   login(email: string, password: string): Observable<User | null> {
 
     // Mise en attente
     this.loaderService.setLoading(true);
 
     // Configuration de la requête
-    const data = {
+    const requestData = {
       email,
       password,
       returnSecureToken: true
@@ -55,7 +55,7 @@ export class AuthService {
     const url = `${environment.firebase.auth.baseUrl}accounts:signInWithPassword?key=${environment.firebase.apiKey}`;
 
     // Envoi requête
-    return this.http.post<Observable<User | null>>(url, data, httpOptions).pipe(
+    return this.http.post<Observable<User | null>>(url, requestData, httpOptions).pipe(
       switchMap((data: any) => {
         const userId: string = data.localId;
         const jwt: string = data.idToken;
@@ -84,15 +84,15 @@ export class AuthService {
     );
   }
 
-  /* Méthode permettant l'authentification automatique depuis firebase de l'utilisateur
-    @return void
-  */
+  /**
+   * Méthode permettant l'authentification automatique depuis firebase de l'utilisateur
+   */
   automaticLogin(): void {
     const data = this.getDataFromLocalStorage();
     const userId: string = data.id || '';
     const jwt: string = data.token || '';
     const now = new Date().getTime();
-    const expirationDate: number = +data.expirationDate || now;
+    const expirationDate: number = +data.date || now;
 
     if (!jwt) {
       return;
@@ -110,9 +110,10 @@ export class AuthService {
     );
   }
 
-  /* Méthode permettant l'enregistrement de l'utilisateur sur firebase
-    @return Observable<User | null>
-  */
+  /**
+   * Méthode permettant l'enregistrement de l'utilisateur sur firebase
+   * @param options Données de l'utilisateur
+   */
   register(options: {
     firstname: string,
     lastname: string,
@@ -125,7 +126,7 @@ export class AuthService {
 
     // Configuration
     const url = `${environment.firebase.auth.baseUrl}accounts:signUp?key=${environment.firebase.apiKey}`;
-    const data = {
+    const requestData = {
       email: options.email,
       password: options.password,
       returnSecureToken: true
@@ -137,7 +138,7 @@ export class AuthService {
     };
 
     // Envoi requête
-    return this.httpClient.post<User>(url, data, httpOptions).pipe(
+    return this.httpClient.post<User>(url, requestData, httpOptions).pipe(
       switchMap((data: any) => {
         const user: User = new User({
           id: data.localId,
@@ -169,15 +170,14 @@ export class AuthService {
     );
   }
 
-
-  /* Méthode permettant d'enregistrer les modifications d'un utilisateur
-    @param user: User
-    @return Observable<User | null>
-  */
-  updateStateUser(user: User): Observable<User | null> {
+  /**
+   * Méthode permettant d'enregistrer les modifications d'un utilisateur
+   * @param currentUser Utilisateur courant
+   */
+  updateStateUser(currentUser: User): Observable<User | null> {
     this.loaderService.setLoading(true);
 
-    return this.userService.update(user).pipe(
+    return this.userService.update(currentUser).pipe(
       tap(user => this.user.next(user)),
       tap(_ => this.toastrService.showMessage({
         type: 'success',
@@ -188,19 +188,19 @@ export class AuthService {
     );
   }
 
-  /* Méthode permettant la déconnexion de l'utilisateur
-    @return void
-  */
+  /**
+   * Méthode permettant la déconnexion de l'utilisateur
+   */
   logout(): void {
     this.removeDataFromLocalStorage();
     this.user.next(null);
     this.router.navigate(['/login']);
   }
 
-  /* Méthode permettant la déconnexion automatique de l'utilisateur
-  * @param timer: number
-  * @return void
-  */
+  /**
+   * Méthode permettant la déconnexion automatique de l'utilisateur
+   * @param timer Temps avant déconnection
+   */
   private logOutTimer(timer: number): void {
     of(true).pipe(
       delay(timer * 1000)
@@ -209,11 +209,11 @@ export class AuthService {
     );
   }
 
-  /* Méthode permettant de sauvegarder en local storage les données utilisateurs
-    @param userId: string
-    @param jwt: string
-    @return void
-  */
+  /**
+   * Méthode permettant de sauvegarder en local storage les données utilisateurs
+   * @param userId Id de l'utilisateur courant
+   * @param jwt Id du token
+   */
   private saveAuthData(userId: string, jwt: string): void {
     this.setDataFromLocalStorage({
       id: userId,
@@ -234,13 +234,13 @@ export class AuthService {
     @return {
     id: string,
     token: string,
-    expirationDate: number
+    date date d'expiration du token
     }
   */
   public getDataFromLocalStorage(): {
     id: string,
     token: string,
-    expirationDate: number
+    date: number
   } {
     const userId: string = localStorage.getItem('userId') || '';
     const jwt: string = localStorage.getItem('token') || '';
@@ -249,7 +249,7 @@ export class AuthService {
     return {
       id: userId,
       token: jwt,
-      expirationDate: expirationDate
+      date: expirationDate
     };
   }
 

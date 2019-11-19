@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../shared/models/user';
+import { User } from '../../../shared/models/user';
 import { Observable, of } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { switchMap, catchError } from 'rxjs/operators';
-import { ErrorService } from './error.service';
+import { ErrorService } from '../error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,15 +25,14 @@ export class UserService {
    */
   getUser(userId: string, jwt: string): Observable<User | null> {
     const url = `${environment.firestore.baseUrl}:runQuery?key=${environment.firebase.apiKey}`;
-    const data = this.getStructureQuery(userId);
+    const req = this.getStructureQuery(userId);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`
       })
     };
-    console.log('ici');
-    return this.httpClient.post(url, data, httpOptions).pipe(
+    return this.httpClient.post(url, req, httpOptions).pipe(
       switchMap((data: any) => {
         return of(this.getUserFromFirestore(data[0].document.fields));
       })
@@ -48,14 +47,14 @@ export class UserService {
    */
   save(user: User, jwt: string): Observable<User | null> {
     const url = `${environment.firestore.baseUrl}users?key=${environment.firebase.apiKey}`;
-    const data = this.getDataUserForFirestore(user);
+    const dataUser = this.getDataUserForFirestore(user);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`
       })
     };
-    return this.httpClient.post<User>(url, data, httpOptions).pipe(
+    return this.httpClient.post<User>(url, dataUser, httpOptions).pipe(
       switchMap((data: any) => {
         return of(this.getUserFromFirestore(data.fields));
       }),
@@ -73,17 +72,17 @@ export class UserService {
   update(user: User): Observable<User | null> {
     // Configuration
     const url = `${environment.firestore.baseUrl}users/${user.id}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
-    const data = this.getDataUserForFirestore(user);
+    const dataUser = this.getDataUserForFirestore(user);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     };
 
-    // Enregistrement en base    
-    return this.httpClient.patch<User>(url, data, httpOptions).pipe(
+    // Enregistrement en base
+    return this.httpClient.patch<User>(url, dataUser, httpOptions).pipe(
       switchMap((data: any) => {
-        return of(this.getUserFromFirestore(data.fields))
+        return of(this.getUserFromFirestore(data.fields));
       })
     );
   }
@@ -93,7 +92,7 @@ export class UserService {
    * @param user Utilisateur courant
    * @return Un JSON pour firestore
    */
-  private getDataUserForFirestore(user: User): Object {
+  private getDataUserForFirestore(user: User): object {
     return {
       fields: {
         id: { stringValue: user.id },
@@ -102,7 +101,7 @@ export class UserService {
         email: { stringValue: user.email },
         roles: {
           arrayValue: {
-            "values": this.getRolesDataForFirestore(user)
+            values: this.getRolesDataForFirestore(user)
           }
         },
         avatarUrl: { stringValue: user.avatarUrl },
@@ -110,7 +109,7 @@ export class UserService {
         dateAdd: { integerValue: user.dateAdd },
         dateUpdate: { integerValue: user.dateUpdate }
       }
-    }
+    };
   }
 
   /**
@@ -137,11 +136,11 @@ export class UserService {
    * @param user Utilisateur courant
    * @return Un tableau de {stringValue: role}
    */
-  private getRolesDataForFirestore(user: User): Object {
+  private getRolesDataForFirestore(user: User): object {
     const rolesUser = [];
     user.roles.forEach(role => {
       rolesUser.push({
-        "stringValue": role
+        stringValue: role
       });
     });
     return rolesUser;
@@ -165,20 +164,20 @@ export class UserService {
    * @param userId Identifiant utilisateur
    * @return Une requête pour firestore
    */
-  private getStructureQuery(userId: string): Object {
+  private getStructureQuery(userId: string): object {
     return {
-      'structuredQuery': {
-        'from': [{
-          'collectionId': 'users'
+      structuredQuery: {
+        from: [{
+          collectionId: 'users'
         }],
-        'where': {
-          'fieldFilter': {
-            'field': {
-              'fieldPath': 'id'
+        where: {
+          fieldFilter: {
+            field: {
+              fieldPath: 'id'
             },
-            'op': 'EQUAL',
-            'value': {
-              'stringValue': userId
+            op: 'EQUAL',
+            value: {
+              stringValue: userId
             }
           }
         }

@@ -27,11 +27,11 @@ const routes: Routes = [
     canActivateChild: [AuthGuard, RoleUserGuard],
     children: [
       {
-        path: '', 
+        path: '',
         component: SettingsComponent,
         children: [
           { path: 'profile', component: ProfileComponent },
-          { path: 'account', component: AccountComponent}
+          { path: 'account', component: AccountComponent }
         ]
       },
     ]

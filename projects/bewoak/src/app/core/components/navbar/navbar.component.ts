@@ -39,14 +39,25 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  /**
+   * Retourne si la page demandée est la page active
+   * @param page page demandée
+   */
   isActive(page: string): boolean {
     return this.router.isActive(page, false); // false, la route n'est pas exacte
   }
 
+  /**
+   * Redirige l'utilisateur vers la page demandée
+   * @param page page demandée
+   */
   navigate(page: string): void {
     this.router.navigate([page]);
   }
 
+  /**
+   * Déconnecte l'utilisateur
+   */
   logOut(): void {
     this.authService.logout();
   }

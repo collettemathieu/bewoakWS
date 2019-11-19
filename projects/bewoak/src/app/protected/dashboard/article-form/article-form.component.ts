@@ -16,22 +16,18 @@ export class ArticleFormComponent implements OnInit {
   constructor(private router: Router, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.courseForm = this.fb.group({
-
-    });
+    this.courseForm = this.fb.group({});
 
     this.articleForm = this.fb.group({
-      'title': '',
-      'description': ''
+      title: '',
+      description: ''
     });
-
-    
   }
 
-  get title(){
+  get title() {
     return this.articleForm.get('title');
   }
-  get description(){
+  get description() {
     return this.articleForm.get('description');
   }
 

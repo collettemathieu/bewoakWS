@@ -18,11 +18,10 @@ export class CatalogComponent implements OnInit {
     this.articles$ = this.getArticles();
   }
 
-  /*
-  * Récupére la liste de tous les articles de bewoak
-  */
-  getArticles(): Observable<Article[]>
-  {
+  /**
+   * Récupére la liste de tous les articles de bewoak
+   */
+  getArticles(): Observable<Article[]> {
     return this.articleService.getArticles();
   }
 

@@ -13,22 +13,30 @@ export class LoginComponent implements OnInit {
 
   private loginForm: FormGroup;
 
-  constructor(private router: Router, 
-    private fb: FormBuilder, 
-    private toastrService:ToastrService,
-    private authService: AuthService) { }
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private toastrService: ToastrService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit() {
     this.loginForm = this.createLoginForm();
   }
 
-  createLoginForm(){
+  /**
+   * Création du formulaire de LogIn pour l'utilisateur
+   */
+  createLoginForm(): FormGroup {
     return this.fb.group({
-      'email': ['', [Validators.email, Validators.required]],
-      'password': ['', [Validators.required, Validators.minLength(8)]]
+      email: ['', [Validators.email, Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(8)]]
     });
   }
 
+  /**
+   * Soumission du formulaire de logIn et redirection si nécessaire
+   */
   submitForm(): void {
     if (this.loginForm.valid) {
       this.authService.login(this.email.value, this.password.value).subscribe(
@@ -38,8 +46,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  get email() { return this.loginForm.get('email') }
+  get email() { return this.loginForm.get('email'); }
 
-  get password() { return this.loginForm.get('password') }
+  get password() { return this.loginForm.get('password'); }
 
 }

@@ -23,11 +23,11 @@ export class AccountFormComponent implements OnInit {
     this.formAccount = this.createForm();
   }
 
-  /*
-  * Création du formulaire de profil utilisateur
-  */
- private createForm(): FormGroup{
-  return this.fb.group({});
- }
+  /**
+   * Création du formulaire de profil utilisateur
+   */
+  private createForm(): FormGroup {
+    return this.fb.group({});
+  }
 
 }

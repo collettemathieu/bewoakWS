@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
-import { User } from '../../../../shared/models/user';
 import { FormUserService } from '../../../../core/services/user/form-user.service';
+import { User } from '../../../../shared/models/user';
 
 @Component({
   selector: 'bw-profile-form',
@@ -14,14 +14,16 @@ export class ProfileFormComponent implements OnInit {
   private formProfile: FormGroup;
   private roles: string;
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
-    private formUserService: FormUserService) { }
+    private formUserService: FormUserService
+  ) { }
 
-  /*
-  * Si l'utilisateur est connecté, création et insertion des données
-  * utilisateur dans le formulaire de profil
-  */
+  /**
+   * Si l'utilisateur est connecté, création et insertion des données
+   * utilisateur dans le formulaire de profil
+   */
   ngOnInit() {
     this.authService.user$.subscribe(
       user => {
@@ -35,11 +37,10 @@ export class ProfileFormComponent implements OnInit {
     );
   }
 
-  /*
-  * Enregistrement des modifications du profil utilisateur
-  * @return void
-  */
-  private submit() {
+  /**
+   * Enregistrement des modifications du profil utilisateur
+   */
+  private submit(): void {
     if (this.formProfile.valid) {
       const user = this.authService.getCurrentUser();
       user.firstname = this.firstname.value;
@@ -50,10 +51,9 @@ export class ProfileFormComponent implements OnInit {
     }
   }
 
-  /*
-  * Création du formulaire de profil utilisateur
-  * @return FormGroup
-  */
+  /**
+   * Création du formulaire de profil utilisateur
+   */
   private createForm(): FormGroup {
     // Contrôles demandés
     const controlsAsked = ['firstname', 'lastname', 'jobBackground'];
@@ -61,50 +61,47 @@ export class ProfileFormComponent implements OnInit {
     return this.formUserService.generateFormGroup(controlsAsked);
   }
 
-  /*
-  * Transformation des données utilisateur pour le formulaire de profil
-  * @param user: User
-  * @return Object avec les données pour le formulaire
-  */
-  private getDataForFormProfile(user: User): Object {
+  /**
+   * Transformation des données utilisateur pour le formulaire de profil
+   * @param user utilisateur courant
+   * @return Un object JSON avec les données pour le formulaire
+   */
+  private getDataForFormProfile(user: User): object {
     return {
-      'firstname': user.firstname,
-      'lastname': user.lastname,
-      'jobBackground': user.jobBackground
-    }
+      firstname: user.firstname,
+      lastname: user.lastname,
+      jobBackground: user.jobBackground
+    };
   }
 
-  /*
-  * Transformation des rôles de l'objet utilisateur pour un affichage dans le formulaire
-  * @param user: User
-  * @return string
-  */
+  /**
+   * Transformation des rôles de l'objet utilisateur pour un affichage dans le formulaire
+   * @param user utilisateur courant
+   */
   private getRolesFromUser(user: User): string {
-    let roles: string = '',
-      _role: string;
+    let roles = '';
+    let userRole: string;
     user.roles.forEach((role, index) => {
       switch (role) {
         case 'ADMIN':
-          _role = 'Administrateur';
+          userRole = 'Administrateur';
           break;
         case 'EXPERT':
-          _role = 'Expert';
+          userRole = 'Expert';
           break;
         case 'USER':
-          _role = 'Utilisateur';
+          userRole = 'Utilisateur';
           break;
       }
 
       if (index === 0) {
-        roles = `${_role}`;
+        roles = `${userRole}`;
       } else {
-        roles = `${roles}, ${_role}`;
+        roles = `${roles}, ${userRole}`;
       }
     });
     return roles;
   }
-
-
 
   get firstname() {
     return this.formProfile.get('firstname');
