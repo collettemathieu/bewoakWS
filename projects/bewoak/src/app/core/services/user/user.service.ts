@@ -28,8 +28,7 @@ export class UserService {
     const req = this.getStructureQuery(userId);
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`
+        'Content-Type': 'application/json'
       })
     };
     return this.httpClient.post(url, req, httpOptions).pipe(
@@ -40,18 +39,16 @@ export class UserService {
   }
 
   /**
-   * Méthode pour l'enregistrement de l'utilisateur dans le firestore après authentification
+   * Méthode pour l'enregistrement d'un nouvel utilisateur dans le firestore après authentification
    * @param user Utilisateur courant
-   * @param jwt Id du token
    * @return Une observable de User
    */
-  save(user: User, jwt: string): Observable<User | null> {
+  save(user: User): Observable<User | null> {
     const url = `${environment.firestore.baseUrl}users?key=${environment.firebase.apiKey}`;
     const dataUser = this.getDataUserForFirestore(user);
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`
+        'Content-Type': 'application/json'
       })
     };
     return this.httpClient.post<User>(url, dataUser, httpOptions).pipe(

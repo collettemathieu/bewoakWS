@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 export class AuthService {
 
   private user: BehaviorSubject<User | null> = new BehaviorSubject(null);
-  private http: HttpClient;
+  private http: HttpClient; // Requête Http sans intercepteurs
   public readonly user$: Observable<User | null> = this.user.asObservable();
 
   constructor(
@@ -138,7 +138,7 @@ export class AuthService {
     };
 
     // Envoi requête
-    return this.httpClient.post<User>(url, requestData, httpOptions).pipe(
+    return this.http.post<User>(url, requestData, httpOptions).pipe(
       switchMap((data: any) => {
         const user: User = new User({
           id: data.localId,
@@ -149,8 +149,7 @@ export class AuthService {
           dateAdd: Date.now(),
           dateUpdate: Date.now()
         });
-        const jwt: string = data.idToken;
-        return this.userService.save(user, jwt);
+        return this.userService.save(user);
       }),
       catchError((error) => {
         // Fin mise en attente
