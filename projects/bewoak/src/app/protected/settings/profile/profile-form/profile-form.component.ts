@@ -1,21 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { FormUserService } from '../../../../core/services/user/form-user.service';
 import { User } from '../../../../shared/models/user';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'bw-profile-form',
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.scss']
 })
-export class ProfileFormComponent implements OnInit {
+export class ProfileFormComponent implements OnInit, OnDestroy {
 
   private formProfile: FormGroup;
+  private subscription: Subscription;
   private roles: string;
 
   constructor(
-    private fb: FormBuilder,
     private authService: AuthService,
     private formUserService: FormUserService
   ) { }
@@ -25,16 +26,22 @@ export class ProfileFormComponent implements OnInit {
    * utilisateur dans le formulaire de profil
    */
   ngOnInit() {
-    this.authService.user$.subscribe(
+    this.subscription = this.authService.user$.subscribe(
       user => {
-        // Affichage des rôles de l'utiliateur (pour information)
-        this.roles = this.getRolesFromUser(user);
-        // Création du formulaire de profil
-        this.formProfile = this.createForm();
-        // Insertion des données utilisateur
-        this.formProfile.setValue(this.getDataForFormProfile(user));
+        if (user) {
+          // Affichage des rôles de l'utiliateur (pour information)
+          this.roles = this.getRolesFromUser(user);
+          // Création du formulaire de profil
+          this.formProfile = this.createForm();
+          // Insertion des données utilisateur
+          this.formProfile.setValue(this.getDataForFormProfile(user));
+        }
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   /**
