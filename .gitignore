@@ -44,3 +44,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Environment prod
+/projects/bewoak/src/environments/environment.ts
+/projects/bewoak/src/environments/environment.prod.ts

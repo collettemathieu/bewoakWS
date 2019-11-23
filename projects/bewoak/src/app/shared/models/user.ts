@@ -2,6 +2,7 @@ type roles = 'USER' | 'EXPERT' | 'ADMIN';
 
 export class User {
     readonly id: string;
+    readonly idCollection: string; // id de la collection dans firestore
     firstname: string;
     lastname: string;
     email: string;
@@ -13,6 +14,7 @@ export class User {
 
     constructor(options: {
         id?: string,
+        idCollection?: string,
         firstname?: string,
         lastname?: string,
         email?: string,
@@ -23,6 +25,7 @@ export class User {
         dateUpdate?: number
     }) {
         this.id = options.id || '';
+        this.idCollection = options.idCollection || '';
         this.firstname = options.firstname || '';
         this.lastname = options.lastname || '';
         this.email = options.email || '';
@@ -33,11 +36,10 @@ export class User {
         this.dateUpdate = options.dateUpdate || 0;
     }
 
-    /*
-    * Détermine si l'utilisateur possède tel rôle
-    * @param role:string
-    * @return boolean
-    */
+    /**
+     * Détermine si l'utilisateur possède tel rôle
+     * @param role Le rôle que l'on souhaite contrôler
+     */
     public hasRole(role: roles): boolean {
         return this.roles.includes(role);
     }

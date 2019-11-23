@@ -16,11 +16,10 @@ import { Router } from '@angular/router';
 export class AuthService {
 
   private user: BehaviorSubject<User | null> = new BehaviorSubject(null);
-  private http: HttpClient; // Requête Http sans intercepteurs
+  private http: HttpClient;
   public readonly user$: Observable<User | null> = this.user.asObservable();
 
   constructor(
-    private httpClient: HttpClient,
     private handler: HttpBackend,
     private router: Router,
     private userService: UserService,
@@ -28,6 +27,7 @@ export class AuthService {
     private errorService: ErrorService,
     private loaderService: LoaderService
   ) {
+    // Requête Http sans intercepteur
     this.http = new HttpClient(this.handler);
   }
 

@@ -6,9 +6,9 @@ export class UserPasswordService {
 
   constructor() { }
 
-  /* Génération d'un mot de passe aléatoire
-    @return string
-  */
+  /**
+   * Génération d'un mot de passe aléatoire
+   */
   generatePassword(): string {
     return generator.generate({
       length: 10,
