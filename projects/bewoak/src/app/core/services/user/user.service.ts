@@ -33,7 +33,7 @@ export class UserService {
     };
     return this.httpClient.post(url, req, httpOptions).pipe(
       switchMap((data: any) => {
-        return of(this.getUserFromFirestore(data[0].document));
+        return of(this.getUserFromFirestore(data[0].document.fields));
       })
     );
   }
@@ -44,7 +44,7 @@ export class UserService {
    * @return Une observable de User
    */
   save(user: User): Observable<User | null> {
-    const url = `${environment.firestore.baseUrlDocument}users?key=${environment.firebase.apiKey}`;
+    const url = `${environment.firestore.baseUrlDocument}users?key=${environment.firebase.apiKey}&documentId=${user.id}`;
     const dataUser = this.getDataUserForFirestore(user);
     const httpOptions = {
       headers: new HttpHeaders({
@@ -53,7 +53,7 @@ export class UserService {
     };
     return this.httpClient.post<User>(url, dataUser, httpOptions).pipe(
       switchMap((data: any) => {
-        return of(this.getUserFromFirestore(data));
+        return of(this.getUserFromFirestore(data.fields));
       }),
       catchError((error) => {
         return this.errorService.handleError(error);
@@ -68,7 +68,7 @@ export class UserService {
    */
   update(user: User): Observable<User | null> {
     // Configuration
-    const url = `${environment.firestore.baseUrl}${user.idCollection}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
+    const url = `${environment.firestore.baseUrlDocument}users/${user.id}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
     const dataUser = this.getDataUserForFirestore(user);
     const httpOptions = {
       headers: new HttpHeaders({
@@ -79,7 +79,7 @@ export class UserService {
     // Enregistrement en base
     return this.httpClient.patch<User>(url, dataUser, httpOptions).pipe(
       switchMap((data: any) => {
-        return of(this.getUserFromFirestore(data));
+        return of(this.getUserFromFirestore(data.fields));
       }),
       catchError((error) => {
         return this.errorService.handleError(error);
@@ -117,18 +117,17 @@ export class UserService {
    * @param fields Champs retournés par le firestore
    * @return Un utilisateur avec les données de firestore
    */
-  private getUserFromFirestore(document: any): User {
+  private getUserFromFirestore(fields: any): User {
     return new User({
-      id: document.fields.id.stringValue,
-      idCollection: document.name,
-      firstname: document.fields.firstname.stringValue,
-      lastname: document.fields.lastname.stringValue,
-      email: document.fields.email.stringValue,
-      roles: this.getRolesDataFromFirestore(document.fields.roles.arrayValue),
-      avatarUrl: document.fields.avatarUrl.stringValue,
-      jobBackground: document.fields.jobBackground.stringValue,
-      dateAdd: document.fields.dateAdd.integerValue,
-      dateUpdate: document.fields.dateUpdate.integerValue,
+      id: fields.id.stringValue,
+      firstname: fields.firstname.stringValue,
+      lastname: fields.lastname.stringValue,
+      email: fields.email.stringValue,
+      roles: this.getRolesDataFromFirestore(fields.roles.arrayValue),
+      avatarUrl: fields.avatarUrl.stringValue,
+      jobBackground: fields.jobBackground.stringValue,
+      dateAdd: fields.dateAdd.integerValue,
+      dateUpdate: fields.dateUpdate.integerValue,
     });
   }
 

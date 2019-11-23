@@ -10,6 +10,7 @@ export class UserPasswordService {
    * Génération d'un mot de passe aléatoire
    */
   generatePassword(): string {
+    return 'rednecks';
     return generator.generate({
       length: 10,
       numbers: true
