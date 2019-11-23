@@ -60,8 +60,7 @@ export class FormUserService {
 
   private addJobBackgroundControl() {
     const control = new FormControl('', {
-      validators: [Validators.required, Validators.minLength(5)],
-      updateOn: 'blur'
+      validators: [Validators.required, Validators.minLength(5)]
     });
     this.form.addControl('jobBackground', control);
   }
