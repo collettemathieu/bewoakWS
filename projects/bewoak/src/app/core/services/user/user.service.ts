@@ -34,6 +34,9 @@ export class UserService {
     return this.httpClient.post(url, req, httpOptions).pipe(
       switchMap((data: any) => {
         return of(this.getUserFromFirestore(data[0].document.fields));
+      }),
+      catchError((error) => {
+        return this.errorService.handleError(error);
       })
     );
   }

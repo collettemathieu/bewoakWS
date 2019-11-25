@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { UserPasswordService } from '../../../core/services/user/user-password.service';
@@ -12,9 +12,9 @@ import { FormUserService } from '../../../core/services/user/form-user.service';
 })
 export class AddUserComponent implements OnInit {
 
-  private addUserForm: FormGroup;
-  private roles: Array<string> = ['USER', 'EXPERT', 'ADMIN'];
-  private config = {
+  public addUserForm: FormGroup;
+  public roles: Array<string> = ['USER', 'EXPERT', 'ADMIN'];
+  public config = {
     // if objects array passed which key to be displayed defaults to description
     displayKey: 'description',
     // true/false for the search functionlity defaults to false
@@ -33,7 +33,6 @@ export class AddUserComponent implements OnInit {
   };
 
   constructor(
-    private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private userPasswordService: UserPasswordService,
@@ -44,6 +43,9 @@ export class AddUserComponent implements OnInit {
     this.addUserForm = this.createForm();
   }
 
+  /**
+   * Création du formulaire de l'utilisateur à partir du générateur de formulaire
+   */
   private createForm(): FormGroup {
     // Contrôles demandés
     const controlsAsked = ['firstname', 'lastname', 'email', 'roleControl'];
@@ -51,6 +53,9 @@ export class AddUserComponent implements OnInit {
     return this.formUserService.generateFormGroup(controlsAsked);
   }
 
+  /**
+   * Soummission du formulaire
+   */
   submitForm(): void {
     if (this.addUserForm.valid) {
       const options = {
@@ -63,10 +68,8 @@ export class AddUserComponent implements OnInit {
 
       // Enregistrement de l'utilisateur dans le firebase
       // Redirection si ok
-      // Réinitialisation du formulaire si ko
       this.authService.register(options).subscribe(
-        _ => this.router.navigate(['/home']),
-        _ => this.addUserForm.reset()
+        _ => this.router.navigate(['/home'])
       );
     }
   }

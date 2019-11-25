@@ -66,6 +66,13 @@ export class AuthService {
       }),
       tap(user => this.user.next(user)),
       tap(_ => this.logOutTimer(3600)),
+      tap(_ => {
+        // Envoi d'un message
+        this.toastrService.showMessage({
+          type: 'success',
+          message: `Bienvenue ${this.user.getValue().firstname}`
+        });
+      }),
       catchError((error) => {
         // Fin mise en attente
         this.loaderService.setLoading(false);
@@ -73,11 +80,6 @@ export class AuthService {
         return this.errorService.handleError(error);
       }),
       finalize(() => {
-        // Envoi d'un message
-        this.toastrService.showMessage({
-          type: 'success',
-          message: `Bienvenue ${this.user.getValue().firstname}`
-        });
         // Fin mise en attente
         this.loaderService.setLoading(false);
       })
@@ -151,6 +153,13 @@ export class AuthService {
         });
         return this.userService.save(user);
       }),
+      tap(_ => {
+        // Envoi d'un message
+        this.toastrService.showMessage({
+          type: 'success',
+          message: 'L\'utilisateur a bien été enregistré'
+        });
+      }),
       catchError((error) => {
         // Fin mise en attente
         this.loaderService.setLoading(false);
@@ -158,11 +167,6 @@ export class AuthService {
         return this.errorService.handleError(error);
       }),
       finalize(() => {
-        // Envoi d'un message
-        this.toastrService.showMessage({
-          type: 'success',
-          message: 'Utilisateur enregistré'
-        });
         // Fin mise en attente
         this.loaderService.setLoading(false);
       })

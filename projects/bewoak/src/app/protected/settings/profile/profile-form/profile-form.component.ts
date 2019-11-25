@@ -12,9 +12,9 @@ import { Subscription } from 'rxjs';
 })
 export class ProfileFormComponent implements OnInit, OnDestroy {
 
-  private formProfile: FormGroup;
+  public formProfile: FormGroup;
   private subscription: Subscription;
-  private roles: string;
+  public roles: string;
 
   constructor(
     private authService: AuthService,
