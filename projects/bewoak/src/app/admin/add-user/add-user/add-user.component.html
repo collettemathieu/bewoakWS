@@ -1,6 +1,7 @@
 <div class="container">
     <div class="row">
-        <form class="col-4 mx-auto mt-5 mb-5" [formGroup]="addUserForm" novalidate (ngSubmit)="submitForm()">
+        <form *ngIf="!displayInfosUser" class="col-4 mx-auto mt-5 mb-5" [formGroup]="addUserForm" novalidate
+            (ngSubmit)="submitForm()">
             <div class="form-group">
                 <label for="firstname">Prénom :</label>
                 <input type="text" class="form-control" id="firstname" formControlName="firstname" autocomplete="false"
@@ -42,9 +43,8 @@
             </div>
             <div class="form-group">
                 <label for="role">Role :</label>
-                <ngx-select-dropdown formControlName="roleControl" [multiple]="true" [options]="roles"
-                [config] = "config"
-                autocomplete="false" autocorrect="false"></ngx-select-dropdown>
+                <ngx-select-dropdown formControlName="roleControl" [multiple]="true" [options]="roles" [config]="config"
+                    autocomplete="false" autocorrect="false"></ngx-select-dropdown>
                 <small *ngIf="roleControl.errors && roleControl.dirty" class="form-text text-muted">
                     <span [hidden]="!roleControl.errors.required">
                         Le rôle de l'utilisateur est requis.
@@ -55,5 +55,16 @@
                 [ngClass]="{'btn-success': addUserForm.valid, 'btn-default': !addUserForm.valid}">
                 Valider</button>
         </form>
+        <div *ngIf="displayInfosUser" class="jumbotron">
+            <h1 class="display-4">Utilisateur enregistré !</h1>
+            <p class="lead">L'utilisateur <span class="font-weight-bold">{{ user.firstname }} {{user.lastname}}</span> a
+                bien été enregistré.
+                Vous pouvez le contacter afin de lui transmettre ses identifiants de connexion.
+            </p>
+            <hr class="my-2">
+            <p><span class="font-weight-bold">Identifiant : </span>{{ user.email }}</p>
+            <p><span class="font-weight-bold">Mot de passe : </span>{{ passwordUser }}</p>
+            <a class="btn btn-primary btn-lg float-right mt-4" (click)="goHome()" role="button">Ok</a>
+        </div>
     </div>
 </div>

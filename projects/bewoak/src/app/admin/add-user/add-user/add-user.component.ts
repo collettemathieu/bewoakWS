@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
-import { Router } from '@angular/router';
 import { UserPasswordService } from '../../../core/services/user/user-password.service';
 import { FormUserService } from '../../../core/services/user/form-user.service';
+import { User } from '../../../shared/models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'bw-add-user',
@@ -12,6 +13,9 @@ import { FormUserService } from '../../../core/services/user/form-user.service';
 })
 export class AddUserComponent implements OnInit {
 
+  public displayInfosUser = false; // Après enregistrement, affiche les informations de l'utilisateur
+  public user: User = new User({});
+  public passwordUser: string;
   public addUserForm: FormGroup;
   public roles: Array<string> = ['USER', 'EXPERT', 'ADMIN'];
   public config = {
@@ -67,11 +71,23 @@ export class AddUserComponent implements OnInit {
       };
 
       // Enregistrement de l'utilisateur dans le firebase
-      // Redirection si ok
+      // Affichage des informations utilisateur si ok
+      // On reste sur le formulaire si ko
       this.authService.register(options).subscribe(
-        _ => this.router.navigate(['/home'])
+        user => {
+          this.user = user;
+          this.passwordUser = options.password;
+          this.displayInfosUser = true;
+        }
       );
     }
+  }
+
+  /**
+   * Redirection vers la page d'accueil
+   */
+  goHome() {
+    this.router.navigate(['home']);
   }
 
   get firstname() {
