@@ -4,6 +4,7 @@ type typeCourseLevel = 'Débutant' | 'Intermédiaire' | 'Expert';
 
 export class Course {
     readonly id: string;
+    name: string;
     articles: Article[];
     url: string;
     like: number; // Nombre de like
@@ -12,6 +13,7 @@ export class Course {
 
     constructor(options: {
         id?: string,
+        name: string,
         articles?: Article[],
         url?: string,
         like?: number,
@@ -19,6 +21,7 @@ export class Course {
         level?: typeCourseLevel
     }) {
         this.id = options.id || '';
+        this.name = options.name || '';
         this.articles = options.articles || [];
         this.url = options.url || '';
         this.like = options.like || 0;
