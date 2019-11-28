@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { AddCourseModalComponent } from '../add-course-modal/add-course-modal.component';
 
 @Component({
   selector: 'bw-add-course',
@@ -7,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddCourseComponent implements OnInit {
 
-  constructor() { }
+  public bsModelRef: BsModalRef;
+
+  constructor(private modalService: BsModalService) { }
 
   ngOnInit() {
   }
@@ -16,7 +20,7 @@ export class AddCourseComponent implements OnInit {
    * Ajout d'un nouveau parcours
    */
   addCourse() {
-    alert('ici');
+    this.bsModelRef = this.modalService.show(AddCourseModalComponent);
   }
 
 }

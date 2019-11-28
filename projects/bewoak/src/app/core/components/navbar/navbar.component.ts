@@ -14,15 +14,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   public user: User;
 
-  private homePath = 'home';
-  private catalogPath = 'catalog';
-  private dashboardPath = 'dashboard';
-  private loginPath = 'login';
-  private adminPath = 'administration';
-  private addUserPath = '/administration/addUser';
-  private addCoursePath = '/dashboard/addCourse';
-  private settingsPath = 'settings';
-  private settingsProfilePath = 'settings/profile';
+  public homePath = 'home';
+  public catalogPath = 'catalog';
+  public dashboardPath = 'dashboard';
+  public loginPath = 'login';
+  public adminPath = 'administration';
+  public addUserPath = '/administration/addUser';
+  public addCoursePath = '/dashboard/addCourse';
+  public settingsPath = 'settings';
+  public settingsProfilePath = 'settings/profile';
 
   constructor(
     private router: Router,
