@@ -7,14 +7,11 @@ import { AddCourseModalComponent } from '../add-course-modal/add-course-modal.co
   templateUrl: './add-course.component.html',
   styleUrls: ['./add-course.component.scss']
 })
-export class AddCourseComponent implements OnInit {
+export class AddCourseComponent {
 
   public bsModelRef: BsModalRef;
 
   constructor(private modalService: BsModalService) { }
-
-  ngOnInit() {
-  }
 
   /**
    * Ajout d'un nouveau parcours

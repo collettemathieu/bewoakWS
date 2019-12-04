@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -6,18 +6,25 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
   templateUrl: './add-course-modal.component.html',
   styleUrls: ['./add-course-modal.component.scss']
 })
-export class AddCourseModalComponent implements OnInit {
+export class AddCourseModalComponent {
 
   constructor(private bsModelRef: BsModalRef) { }
-
-  ngOnInit() {
-  }
 
   /**
    * Fermeture de la fenêtre modale
    */
   closeModal() {
     this.bsModelRef.hide();
+  }
+
+  /**
+   * Demande de fermeture de la fenêtre modale
+   * @param closed Est-ce que la fenêtre doit être fermée ?
+   */
+  mustBeClosed(closed: boolean) {
+    if (closed) {
+      this.closeModal();
+    }
   }
 
 }

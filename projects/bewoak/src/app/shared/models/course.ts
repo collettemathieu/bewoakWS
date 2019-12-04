@@ -18,7 +18,7 @@ export class Course {
         url?: string,
         like?: number,
         userId: string,
-        level?: typeCourseLevel
+        level: typeCourseLevel
     }) {
         this.id = options.id || '';
         this.name = options.name || '';

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Toastr } from '../../../../shared/interface/toastr';
 
 @Component({
@@ -16,7 +16,7 @@ export class MessageComponent {
 
   constructor() { }
 
-  private closeMessage() {
+  public closeMessage() {
     this.closeMessageEmitter.emit(this.message);
   }
 
