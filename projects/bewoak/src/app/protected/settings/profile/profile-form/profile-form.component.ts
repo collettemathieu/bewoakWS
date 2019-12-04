@@ -47,7 +47,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   /**
    * Enregistrement des modifications du profil utilisateur
    */
-  private submit(): void {
+  public submit(): void {
     if (this.formProfile.valid) {
       const user = this.authService.getCurrentUser();
       user.firstname = this.firstname.value;

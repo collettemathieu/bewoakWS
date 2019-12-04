@@ -20,7 +20,7 @@ export class AddCourseComponent implements OnInit {
    * Ajout d'un nouveau parcours
    */
   addCourse() {
-    this.bsModelRef = this.modalService.show(AddCourseModalComponent);
+    this.bsModelRef = this.modalService.show(AddCourseModalComponent, {class: 'modal-lg'});
   }
 
 }
