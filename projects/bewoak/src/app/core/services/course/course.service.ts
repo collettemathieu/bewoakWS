@@ -6,9 +6,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
 import { ErrorService } from '../error.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CourseService {
 
   constructor(private httpClient: HttpClient, private errorService: ErrorService) { }
@@ -28,6 +26,28 @@ export class CourseService {
     return this.httpClient.post<Course>(url, dataCourse, httpOptions).pipe(
       switchMap((data: any) => {
         return of(this.getCourseFromFirestore(data.fields));
+      }),
+      catchError((error) => {
+        return this.errorService.handleError(error);
+      })
+    );
+  }
+
+  /**
+   * Retourne les parcours pédagogiques de l'utilisateur
+   * @param userId L'identifiant de l'utilisateur
+   */
+  getCourses(userId: string): Observable<Course[]>{
+    const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
+    const req = this.getStructureQuery(userId);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return this.httpClient.post(url, req, httpOptions).pipe(
+      switchMap((data: any) => {
+        return of([this.getCourseFromFirestore(data[0].document.fields)]);
       }),
       catchError((error) => {
         return this.errorService.handleError(error);
@@ -66,5 +86,32 @@ export class CourseService {
       level: fields.level.stringValue,
       userId: fields.userId.stringValue
     });
+  }
+
+  /**
+   * Méthode pour le requêtage en base depuis firestore afin de récupérer les parcours 
+   * pédagogiques de l'utilisateur
+   * @param userId Identifiant utilisateur
+   * @return Une requête pour firestore
+   */
+  private getStructureQuery(userId: string): object {
+    return {
+      structuredQuery: {
+        from: [{
+          collectionId: 'courses'
+        }],
+        where: {
+          fieldFilter: {
+            field: {
+              fieldPath: 'userId'
+            },
+            op: 'EQUAL',
+            value: {
+              stringValue: userId
+            }
+          }
+        }
+      }
+    };
   }
 }

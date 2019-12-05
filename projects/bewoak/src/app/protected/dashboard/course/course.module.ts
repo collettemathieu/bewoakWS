@@ -6,6 +6,8 @@ import { SharedModule } from '../../../shared/shared.module';
 import { AddCourseModalComponent } from './add-course-modal/add-course-modal.component';
 import { AddCourseFormComponent } from './add-course-form/add-course-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CourseService } from '../../../core/services/course/course.service';
+import { CourseStateService } from '../../../core/services/course/course-state.service';
 
 
 @NgModule({
@@ -15,6 +17,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     CourseRoutingModule
   ],
+  providers: [CourseService, CourseStateService],
   exports: [AddCourseComponent],
   entryComponents: [AddCourseModalComponent]
 })

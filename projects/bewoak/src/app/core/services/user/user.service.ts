@@ -20,10 +20,9 @@ export class UserService {
    * Méthode pour récupérer un utilisateur depuis le firestore en fonction de son
    * identififiant après authentification
    * @param userId Identifiant de l'utilisateur
-   * @param jwt Id du token
    * @return Une observable de User
    */
-  getUser(userId: string, jwt: string): Observable<User | null> {
+  getUser(userId: string): Observable<User | null> {
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
     const req = this.getStructureQuery(userId);
     const httpOptions = {

@@ -62,7 +62,7 @@ export class AuthService {
         // Sauvegarde des données dans le localStorage
         this.saveAuthData(userId, jwt);
         // Récupération des données utilisateur
-        return this.userService.getUser(userId, jwt);
+        return this.userService.getUser(userId);
       }),
       tap(user => this.user.next(user)),
       tap(_ => this.logOutTimer(3600)),
@@ -104,7 +104,7 @@ export class AuthService {
       return;
     }
 
-    this.userService.getUser(userId, jwt).subscribe(
+    this.userService.getUser(userId).subscribe(
       user => {
         this.user.next(user);
         this.router.navigate(['home']);
