@@ -8,10 +8,11 @@ import { ErrorService } from '../error.service';
 import { LoaderService } from '../loader.service';
 
 @Injectable()
-export class CourseStateService {
+export class CourseStateUserService {
 
-  private courses: BehaviorSubject<Course[]> = new BehaviorSubject([]);
-  public readonly courses$: Observable<Course[]> = this.courses.asObservable();
+  // Etat des parcours pédagogiques d'un utilisateur
+  private coursesByUser: BehaviorSubject<Course[]> = new BehaviorSubject([]);
+  public readonly coursesByUser$: Observable<Course[]> = this.coursesByUser.asObservable();
 
 
   constructor(
@@ -26,15 +27,16 @@ export class CourseStateService {
    * @param course Le parcours pédagogique
    * @return Retourne le tableau des parcours pédagogiques de l'utilisateur mis à jour
    */
-  register(course: Course): Observable<Course> {
+  public register(course: Course): Observable<Course> {
 
+    // Mise en attente
     this.loaderService.setLoading(true);
 
     return this.courseService.save(course).pipe(
       tap(newCourse => {
-        const courses = this.courses.value;
+        const courses = this.coursesByUser.value;
         courses.push(newCourse);
-        this.courses.next(courses);
+        this.coursesByUser.next(courses);
       }),
       tap(_ => {
         // Envoi d'un message à l'utilisateur
@@ -42,8 +44,6 @@ export class CourseStateService {
           type: 'success',
           message: 'Le parcours pédagogique a bien été enregistré'
         });
-        // Fin mise en attente
-        this.loaderService.setLoading(false);
       }),
       catchError(error => this.errorService.handleError(error)),
       finalize(() => {
@@ -57,12 +57,21 @@ export class CourseStateService {
    * Retourne les parcours pédagogiques de l'utilisateur
    * @param userId L'identifiant de l'utilisateur
    */
-  getCourses(userId: string): Observable<Course[]>{
-    return this.courseService.getCourses(userId).pipe(
-      tap( courses => {
-        this.courses.next(courses);
+  public getCoursesByUser(userId: string): Observable<Course[]> {
+    
+    // Mise en attente
+    this.loaderService.setLoading(true);
+
+    return this.courseService.getCoursesByUser(userId).pipe(
+      tap(courses => {
+        this.coursesByUser.next(courses);
+      }),
+      catchError(error => this.errorService.handleError(error)),
+      finalize(() => {
+        // Fin mise en attente
+        this.loaderService.setLoading(false);
       })
     );
   }
-  
+
 }

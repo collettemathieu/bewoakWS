@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../core/services/auth.service';
+import { User } from '../../../shared/models/user';
+import { CourseStateUserService } from '../../../core/services/course/course-state-user.service';
 
 @Component({
   selector: 'bw-dashboard',
@@ -7,9 +10,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  private user: User;
+
+  constructor(private authService: AuthService, private courseStateUser: CourseStateUserService) { }
 
   ngOnInit() {
+    this.user = this.authService.getCurrentUser();
+    this.courseStateUser.getCoursesByUser(this.user.id).subscribe();
   }
 
 }

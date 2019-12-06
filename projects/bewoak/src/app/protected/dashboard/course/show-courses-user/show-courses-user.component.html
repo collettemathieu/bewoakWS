@@ -1,0 +1,9 @@
+<div *ngIf="(courses$ | async) as courses">
+    <ul *ngIf="courses.length != 0">
+        <li *ngFor="let course of courses">
+            {{ course.name }}
+        </li>
+    </ul>
+    <p *ngIf="courses.length == 0">Vous n'avez encore aucun parcours pédagogique.</p>
+</div>
+

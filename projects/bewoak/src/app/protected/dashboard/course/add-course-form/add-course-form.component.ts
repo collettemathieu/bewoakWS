@@ -4,7 +4,7 @@ import { Course } from '../../../../shared/models/course';
 import { AuthService } from 'projects/bewoak/src/app/core/services/auth.service';
 import { Subscription } from 'rxjs';
 import { User } from '../../../../shared/models/user';
-import { CourseStateService } from 'projects/bewoak/src/app/core/services/course/course-state.service';
+import { CourseStateUserService } from 'projects/bewoak/src/app/core/services/course/course-state-user.service';
 
 @Component({
   selector: 'bw-add-course-form',
@@ -31,7 +31,7 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private courseStateService: CourseStateService
+    private courseStateUserService: CourseStateUserService
   ) { }
 
   ngOnInit() {
@@ -68,7 +68,7 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
         userId: this.user.id
       };
       const course = new Course(options);
-      this.courseStateService.register(course).subscribe();
+      this.courseStateUserService.register(course).subscribe();
 
       // Fermeture de la fenêtre modale
       this.closeModalParent.emit(true);

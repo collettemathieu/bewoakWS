@@ -15,7 +15,7 @@ export class CourseService {
    * Enregistrer un nouveau parcours pédagogique
    * @param course Le parcours pédagogique
    */
-  save(course: Course): Observable<Course | null> {
+  public save(course: Course): Observable<Course | null> {
     const url = `${environment.firestore.baseUrlDocument}courses?key=${environment.firebase.apiKey}`;
     const dataCourse = this.getDataCourseForFirestore(course);
     const httpOptions = {
@@ -37,7 +37,7 @@ export class CourseService {
    * Retourne les parcours pédagogiques de l'utilisateur
    * @param userId L'identifiant de l'utilisateur
    */
-  getCourses(userId: string): Observable<Course[]>{
+  public getCoursesByUser(userId: string): Observable<Course[]> {
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
     const req = this.getStructureQuery(userId);
     const httpOptions = {
@@ -47,7 +47,13 @@ export class CourseService {
     };
     return this.httpClient.post(url, req, httpOptions).pipe(
       switchMap((data: any) => {
-        return of([this.getCourseFromFirestore(data[0].document.fields)]);
+        let courses: Course[] = [];
+        data.forEach(element => {
+          if(typeof element.document != 'undefined'){
+            courses.push(this.getCourseFromFirestore(element.document.fields));
+          }
+        });
+        return of(courses);
       }),
       catchError((error) => {
         return this.errorService.handleError(error);
@@ -56,7 +62,7 @@ export class CourseService {
   }
 
   /**
-   * Retourne les données du parcours pour le firestore
+   * Retourne les données du parcours pédagogique pour le firestore
    * @param course Le parcours pédagogique
    */
   private getDataCourseForFirestore(course: Course): object {
