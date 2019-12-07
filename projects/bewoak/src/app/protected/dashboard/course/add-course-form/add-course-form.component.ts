@@ -65,7 +65,9 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
       const options = {
         name: this.name.value,
         level: this.levelControl.value,
-        userId: this.user.id
+        userId: this.user.id,
+        dateAdd: Date.now(),
+        dateUpdate: Date.now()
       };
       const course = new Course(options);
       this.courseStateUserService.register(course).subscribe();

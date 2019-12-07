@@ -73,7 +73,10 @@ export class CourseService {
         url: { stringValue: course.url },
         like: { integerValue: course.like },
         level: { stringValue: course.level },
-        userId: { stringValue: course.userId }
+        userId: { stringValue: course.userId },
+        dateAdd: { integerValue: course.dateAdd },
+        dateUpdate: { integerValue: course.dateUpdate },
+        dateDel: { integerValue: course.dateDel }
       }
     };
   }
@@ -90,7 +93,10 @@ export class CourseService {
       url: fields.url.stringValue,
       like: fields.like.integerValue,
       level: fields.level.stringValue,
-      userId: fields.userId.stringValue
+      userId: fields.userId.stringValue,
+      dateAdd: fields.dateAdd.integerValue,
+      dateUpdate: fields.dateUpdate.integerValue,
+      dateDel: fields.dateDel.integerValue
     });
   }
 
