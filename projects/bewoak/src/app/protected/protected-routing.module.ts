@@ -8,6 +8,7 @@ import { SettingsComponent } from './settings/settings/settings.component';
 import { ProfileComponent } from './settings/profile/profile/profile.component';
 import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 import { AccountComponent } from './settings/account/account/account.component';
+import { CourseComponent } from './dashboard/course/course/course.component';
 
 
 const routes: Routes = [
@@ -17,7 +18,13 @@ const routes: Routes = [
     canActivate: [AuthGuard, RoleExpertGuard],
     canActivateChild: [AuthGuard, RoleExpertGuard],
     children: [
-      { path: 'addCourse', component: DashboardComponent }
+      {
+        path: '',
+        component: DashboardComponent,
+        children: [
+          { path: 'manageCourse', component: CourseComponent }
+        ]
+      },
     ]
   },
   {

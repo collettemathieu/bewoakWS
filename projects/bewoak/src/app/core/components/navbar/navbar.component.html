@@ -11,10 +11,7 @@
                 Tableau de bord
             </a>
             <div *dropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" (click)="navigate(addCoursePath)">Ajouter un parcours</a>
-                <a class="dropdown-item">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item">Something else here</a>
+                <a class="dropdown-item" (click)="navigate(manageCoursePath)">Gérer mes parcours</a>
             </div>
         </li>
         <li *ngIf="user?.hasRole('ADMIN')" dropdown class="nav-item dropdown">

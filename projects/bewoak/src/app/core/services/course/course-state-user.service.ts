@@ -58,7 +58,7 @@ export class CourseStateUserService {
    * @param userId L'identifiant de l'utilisateur
    */
   public getCoursesByUser(userId: string): Observable<Course[]> {
-    
+
     // Mise en attente
     this.loaderService.setLoading(true);
 

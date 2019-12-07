@@ -47,9 +47,9 @@ export class CourseService {
     };
     return this.httpClient.post(url, req, httpOptions).pipe(
       switchMap((data: any) => {
-        let courses: Course[] = [];
+        const courses: Course[] = [];
         data.forEach(element => {
-          if(typeof element.document != 'undefined'){
+          if (typeof element.document !== 'undefined') {
             courses.push(this.getCourseFromFirestore(element.document.fields));
           }
         });
@@ -95,7 +95,7 @@ export class CourseService {
   }
 
   /**
-   * Méthode pour le requêtage en base depuis firestore afin de récupérer les parcours 
+   * Méthode pour le requêtage en base depuis firestore afin de récupérer les parcours
    * pédagogiques de l'utilisateur
    * @param userId Identifiant utilisateur
    * @return Une requête pour firestore

@@ -7,16 +7,19 @@ import { AddCourseModalComponent } from './add-course-modal/add-course-modal.com
 import { AddCourseFormComponent } from './add-course-form/add-course-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ShowCoursesUserComponent } from './show-courses-user/show-courses-user.component';
+import { CourseComponent } from './course/course.component';
+import { CourseService } from '../../../core/services/course/course.service';
+import { CourseStateUserService } from '../../../core/services/course/course-state-user.service';
 
 
 @NgModule({
-  declarations: [AddCourseComponent, AddCourseModalComponent, AddCourseFormComponent, ShowCoursesUserComponent],
+  declarations: [AddCourseComponent, AddCourseModalComponent, AddCourseFormComponent, ShowCoursesUserComponent, CourseComponent],
   imports: [
     SharedModule,
     ReactiveFormsModule,
     CourseRoutingModule
   ],
-  exports: [AddCourseComponent, ShowCoursesUserComponent],
+  providers: [CourseService, CourseStateUserService],
   entryComponents: [AddCourseModalComponent]
 })
 export class CourseModule { }

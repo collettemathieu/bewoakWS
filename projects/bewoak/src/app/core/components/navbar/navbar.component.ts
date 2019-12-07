@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   public loginPath = 'login';
   public adminPath = 'administration';
   public addUserPath = '/administration/addUser';
-  public addCoursePath = '/dashboard/addCourse';
+  public manageCoursePath = '/dashboard/manageCourse';
   public settingsPath = 'settings';
   public settingsProfilePath = 'settings/profile';
 
