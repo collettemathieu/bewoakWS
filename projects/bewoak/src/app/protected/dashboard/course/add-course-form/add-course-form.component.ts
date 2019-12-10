@@ -17,9 +17,24 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
   private closeModalParent: EventEmitter<boolean> = new EventEmitter(false);
 
   public formCourse: FormGroup;
-  public levels: Array<string> = ['Débutant', 'Intermédiaire', 'Expert'];
+  // Options des difficultés du parcours pédagogique
+  public levels: { id: number, name: string }[] = [
+    {
+      id: 1,
+      name: 'Débutant'
+    },
+    {
+      id: 2,
+      name: 'Intermédiaire'
+    },
+    {
+      id: 3,
+      name: 'Expert'
+    }
+  ];
   // Configuration du selecteur du formulaire
   public config = {
+    displayKey: 'name',
     search: false,
     height: 'auto',
     placeholder: 'Sélectionner la difficulté',
@@ -64,7 +79,7 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
     if (this.formCourse.valid) {
       const options = {
         name: this.name.value,
-        level: this.levelControl.value,
+        level: this.levelControl.value.name,
         userId: this.user.id,
         dateAdd: Date.now(),
         dateUpdate: Date.now()
