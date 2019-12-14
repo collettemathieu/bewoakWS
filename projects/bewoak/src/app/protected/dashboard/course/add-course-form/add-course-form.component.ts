@@ -5,6 +5,7 @@ import { AuthService } from 'projects/bewoak/src/app/core/services/auth.service'
 import { Subscription } from 'rxjs';
 import { User } from '../../../../shared/models/user';
 import { CourseStateUserService } from 'projects/bewoak/src/app/core/services/course/course-state-user.service';
+import { CheckCourseNameValidator } from 'projects/bewoak/src/app/shared/validators/check-course-name.validator';
 
 @Component({
   selector: 'bw-add-course-form',
@@ -46,7 +47,8 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private courseStateUserService: CourseStateUserService
+    private courseStateUserService: CourseStateUserService,
+    private checkCourseNameValidator: CheckCourseNameValidator
   ) { }
 
   ngOnInit() {
@@ -66,7 +68,9 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', {
-        validators: [Validators.required, Validators.minLength(3)]
+        validators: [Validators.required, Validators.minLength(3)],
+        asyncValidators: [this.checkCourseNameValidator],
+        updateOn: 'change'
       }],
       levelControl: ['', [Validators.required]]
     });

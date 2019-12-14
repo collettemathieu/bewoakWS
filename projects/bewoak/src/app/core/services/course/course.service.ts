@@ -39,7 +39,7 @@ export class CourseService {
    */
   public getCoursesByUser(userId: string): Observable<Course[]> {
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
-    const req = this.getStructureQuery(userId);
+    const req = this.getStructureQueryByUser(userId);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -54,6 +54,32 @@ export class CourseService {
           }
         });
         return of(courses);
+      }),
+      catchError((error) => {
+        return this.errorService.handleError(error);
+      })
+    );
+  }
+
+  /**
+   * Retourne si le nom du parcours pédagogique est disponible
+   * @param name Le nom du parcours pédagogique
+   */
+  public isAvailable(name: string): Observable<boolean> {
+    const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
+    const req = this.getStructureQueryByName(name);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.httpClient.post(url, req, httpOptions).pipe(
+      switchMap((data: any) => {
+        if (typeof data[0].document !== 'undefined') {
+          return of(false);
+        }
+        return of(true);
       }),
       catchError((error) => {
         return this.errorService.handleError(error);
@@ -106,7 +132,7 @@ export class CourseService {
    * @param userId Identifiant utilisateur
    * @return Une requête pour firestore
    */
-  private getStructureQuery(userId: string): object {
+  private getStructureQueryByUser(userId: string): object {
     return {
       structuredQuery: {
         from: [{
@@ -120,6 +146,33 @@ export class CourseService {
             op: 'EQUAL',
             value: {
               stringValue: userId
+            }
+          }
+        }
+      }
+    };
+  }
+
+  /**
+   * Méthode pour le requêtage en base depuis firestore afin de récupérer les parcours
+   * pédagogiques possédant le nom name
+   * @param name Nom du parcours pédagogique
+   * @return Une requête pour firestore
+   */
+  private getStructureQueryByName(name: string): object {
+    return {
+      structuredQuery: {
+        from: [{
+          collectionId: 'courses'
+        }],
+        where: {
+          fieldFilter: {
+            field: {
+              fieldPath: 'name'
+            },
+            op: 'EQUAL',
+            value: {
+              stringValue: name
             }
           }
         }

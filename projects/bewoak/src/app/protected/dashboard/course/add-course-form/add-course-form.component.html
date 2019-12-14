@@ -12,6 +12,9 @@
                     <span [hidden]="!name.errors.minlength">
                         Le nom du parcours doit comporter au moins 3 caractères.
                     </span>
+                    <span [hidden]="!name.errors.checkCourseName">
+                        Le nom de ce parcours est déjà utilisé. Renseignez un autre nom.
+                    </span>
                 </small>
             </div>
         </div>
