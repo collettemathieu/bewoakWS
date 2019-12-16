@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
+import localeFr from '@angular/common/locales/fr';
 
 import { CourseRoutingModule } from './course-routing.module';
 import { AddCourseComponent } from './add-course/add-course.component';
@@ -10,16 +11,18 @@ import { ShowCoursesUserComponent } from './show-courses-user/show-courses-user.
 import { CourseComponent } from './course/course.component';
 import { CourseService } from '../../../core/services/course/course.service';
 import { CourseStateUserService } from '../../../core/services/course/course-state-user.service';
-
+import { registerLocaleData } from '@angular/common';
+import { CourseUserComponent } from './course-user/course-user.component';
+registerLocaleData(localeFr, 'fr-FR');
 
 @NgModule({
-  declarations: [AddCourseComponent, AddCourseModalComponent, AddCourseFormComponent, ShowCoursesUserComponent, CourseComponent],
+  declarations: [AddCourseComponent, AddCourseModalComponent, AddCourseFormComponent, ShowCoursesUserComponent, CourseComponent, CourseUserComponent],
   imports: [
     SharedModule,
     ReactiveFormsModule,
     CourseRoutingModule
   ],
-  providers: [CourseService, CourseStateUserService],
+  providers: [CourseService, CourseStateUserService, { provide: LOCALE_ID, useValue: 'fr-FR' }],
   entryComponents: [AddCourseModalComponent]
 })
 export class CourseModule { }

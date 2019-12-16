@@ -1,9 +1,20 @@
-<div *ngIf="(courses$ | async) as courses">
-    <ul *ngIf="courses.length != 0">
-        <li *ngFor="let course of courses">
-            {{ course.name }}
-        </li>
-    </ul>
-    <p *ngIf="courses.length == 0">Vous n'avez encore aucun parcours pédagogique.</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div *ngIf="(courses$ | async) as courses">
+                <div *ngIf="courses.length != 0">
+                    <div *ngFor="let course of courses" class="col-md-4">
+                        <bw-course-user [course]="course"></bw-course-user>
+                    </div>
+                </div>
+                <div *ngIf="courses.length == 0" class="jumbotron">
+                    <div class="container">
+                        <h1 class="display-4">Aucun parcours trouvé</h1>
+                        <p class="lead">Vous n'avez pas encore créé de parcours pédagogique.</p>
+                        <p class="lead">Cliquez sur le bouton ajouter un parcours pédagogique pour commencer.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
