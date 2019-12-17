@@ -1,19 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Course } from 'projects/bewoak/src/app/shared/models/course';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Course } from '../../../../shared/models/course';
 
 @Component({
   selector: 'bw-course-user',
   templateUrl: './course-user.component.html',
   styleUrls: ['./course-user.component.scss']
 })
-export class CourseUserComponent implements OnInit {
+export class CourseUserComponent {
 
   @Input()
   course: Course;
 
-  constructor() { }
+  @Output()
+  removeCourse: EventEmitter<Course> = new EventEmitter();
 
-  ngOnInit() {
+  /**
+   * Suppression du parcours pédagogique
+   */
+  public remove(): void {
+    this.removeCourse.emit(this.course);
   }
 
 }

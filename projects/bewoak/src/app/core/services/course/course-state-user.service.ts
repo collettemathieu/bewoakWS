@@ -74,4 +74,24 @@ export class CourseStateUserService {
     );
   }
 
+  /**
+   * Suppression d'un parcours pédagogique
+   * @param course Le parcours à supprimer
+   */
+  public removeCourse(course: Course): void {
+    // Mise en attente
+    this.loaderService.setLoading(true);
+
+    this.courseService.remove(course).pipe(
+      tap(oldCourse => {
+
+      }),
+      catchError(error => this.errorService.handleError(error)),
+      finalize(() => {
+        // Mise en attente
+        this.loaderService.setLoading(false);
+      })
+    );
+  }
+
 }

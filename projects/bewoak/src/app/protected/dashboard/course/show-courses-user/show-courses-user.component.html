@@ -4,7 +4,7 @@
             <div *ngIf="(courses$ | async) as courses">
                 <div *ngIf="courses.length != 0">
                     <div *ngFor="let course of courses" class="col-md-4">
-                        <bw-course-user [course]="course"></bw-course-user>
+                        <bw-course-user [course]="course" (removeCourse)="remove($event)"></bw-course-user>
                     </div>
                 </div>
                 <div *ngIf="courses.length == 0" class="jumbotron">

@@ -88,6 +88,29 @@ export class CourseService {
   }
 
   /**
+   * Suppression d'un parcours pédagogique
+   * @param course Le parcours pédagogique à supprimer
+   */
+  public remove(course: Course): Observable<Course>{
+    const url = `${environment.firestore.baseUrlDocument}${course.id}?key=${environment.firebase.apiKey}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.httpClient.delete(url, httpOptions).pipe(
+      switchMap((data: any) => {
+        console.log(data);
+        return of(data);
+      }),
+      catchError((error) => {
+        return this.errorService.handleError(error);
+      })
+    );
+  }
+
+  /**
    * Retourne les données du parcours pédagogique pour le firestore
    * @param course Le parcours pédagogique
    */
