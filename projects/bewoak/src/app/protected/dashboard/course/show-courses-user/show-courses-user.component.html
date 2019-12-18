@@ -1,6 +1,6 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row">
             <div *ngIf="(courses$ | async) as courses">
                 <div *ngIf="courses.length != 0">
                     <div *ngFor="let course of courses" class="col-md-4">

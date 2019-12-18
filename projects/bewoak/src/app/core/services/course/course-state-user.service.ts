@@ -88,8 +88,7 @@ export class CourseStateUserService {
         const index = courses.findIndex(c => {
           return c === oldCourse;
         });
-
-        if (index !== 1) {
+        if (index !== -1) {
           courses.splice(index, 1);
         }
 
