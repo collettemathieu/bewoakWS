@@ -11,10 +11,10 @@ import { RandomService } from '../random.service';
 export class CourseService {
 
   constructor(
-    private httpClient: HttpClient, 
+    private httpClient: HttpClient,
     private errorService: ErrorService,
     private randomService: RandomService
-    ) { }
+  ) { }
 
   /**
    * Enregistrer un nouveau parcours pédagogique
@@ -105,21 +105,18 @@ export class CourseService {
    * Suppression d'un parcours pédagogique
    * @param course Le parcours pédagogique à supprimer
    */
-  public remove(course: Course): Observable<Course>{
+  public remove(course: Course): Observable<Course> {
     const url = `${environment.firestore.baseUrlDocument}courses/${course.id}?key=${environment.firebase.apiKey}`;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     };
-    console.log(url);
     return this.httpClient.delete(url, httpOptions).pipe(
-      switchMap((data: any) => {
-        console.log(data);
-        return of(data);
+      switchMap(_ => {
+        return of(course);
       }),
       catchError((error) => {
-        console.log(error);
         return this.errorService.handleError(error);
       })
     );

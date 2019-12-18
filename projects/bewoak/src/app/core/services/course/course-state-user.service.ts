@@ -84,14 +84,23 @@ export class CourseStateUserService {
 
     this.courseService.remove(course).pipe(
       tap(oldCourse => {
+        const courses = this.coursesByUser.value;
+        const index = courses.findIndex(c => {
+          return c === oldCourse;
+        });
 
+        if (index !== 1) {
+          courses.splice(index, 1);
+        }
+
+        this.coursesByUser.next(courses);
       }),
       catchError(error => this.errorService.handleError(error)),
       finalize(() => {
         // Mise en attente
         this.loaderService.setLoading(false);
       })
-    );
+    ).subscribe();
   }
 
 }
