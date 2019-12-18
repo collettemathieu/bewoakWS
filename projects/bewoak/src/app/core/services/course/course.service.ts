@@ -5,19 +5,33 @@ import { environment } from '../../../../environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
 import { ErrorService } from '../error.service';
+import { RandomService } from '../random.service';
 
 @Injectable()
 export class CourseService {
 
-  constructor(private httpClient: HttpClient, private errorService: ErrorService) { }
+  constructor(
+    private httpClient: HttpClient, 
+    private errorService: ErrorService,
+    private randomService: RandomService
+    ) { }
 
   /**
    * Enregistrer un nouveau parcours pédagogique
    * @param course Le parcours pédagogique
    */
   public save(course: Course): Observable<Course | null> {
-    const url = `${environment.firestore.baseUrlDocument}courses?key=${environment.firebase.apiKey}`;
-    const dataCourse = this.getDataCourseForFirestore(course);
+    const id = this.randomService.generateId();
+    const newCourse = new Course({
+      id,
+      name: course.name,
+      level: course.level,
+      userId: course.userId,
+      dateAdd: course.dateAdd,
+      dateUpdate: course.dateUpdate
+    });
+    const url = `${environment.firestore.baseUrlDocument}courses?key=${environment.firebase.apiKey}&documentId=${id}`;
+    const dataCourse = this.getDataCourseForFirestore(newCourse);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -92,19 +106,20 @@ export class CourseService {
    * @param course Le parcours pédagogique à supprimer
    */
   public remove(course: Course): Observable<Course>{
-    const url = `${environment.firestore.baseUrlDocument}${course.id}?key=${environment.firebase.apiKey}`;
+    const url = `${environment.firestore.baseUrlDocument}courses/${course.id}?key=${environment.firebase.apiKey}`;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     };
-
+    console.log(url);
     return this.httpClient.delete(url, httpOptions).pipe(
       switchMap((data: any) => {
         console.log(data);
         return of(data);
       }),
       catchError((error) => {
+        console.log(error);
         return this.errorService.handleError(error);
       })
     );

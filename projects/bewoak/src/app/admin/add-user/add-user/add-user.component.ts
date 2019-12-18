@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
-import { UserPasswordService } from '../../../core/services/user/user-password.service';
+import { RandomService } from '../../../core/services/random.service';
 import { FormUserService } from '../../../core/services/user/form-user.service';
 import { User } from '../../../shared/models/user';
 import { Router } from '@angular/router';
@@ -39,7 +39,7 @@ export class AddUserComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private userPasswordService: UserPasswordService,
+    private randomService: RandomService,
     private formUserService: FormUserService
   ) { }
 
@@ -66,7 +66,7 @@ export class AddUserComponent implements OnInit {
         firstname: this.firstname.value,
         lastname: this.lastname.value,
         email: this.email.value,
-        password: this.userPasswordService.generatePassword(),
+        password: this.randomService.generatePassword(),
         role: this.roleControl.value
       };
 

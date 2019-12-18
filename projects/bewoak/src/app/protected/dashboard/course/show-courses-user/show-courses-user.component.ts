@@ -19,7 +19,7 @@ export class ShowCoursesUserComponent implements OnInit {
   }
 
   public remove(course: Course): void{
-    console.log(course);
+    this.courseStateUser.removeCourse(course);
   }
 
 }
