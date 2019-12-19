@@ -1,20 +1,16 @@
-<div class="album py-5 bg-light">
-    <div class="container">
+<div *ngIf="(courses$ | async) as courses">
+    <div *ngIf="courses.length != 0" class="container">
         <div class="row">
-            <div *ngIf="(courses$ | async) as courses">
-                <div *ngIf="courses.length != 0">
-                    <div *ngFor="let course of courses" class="col-md-4">
-                        <bw-course-user [course]="course" (removeCourse)="remove($event)"></bw-course-user>
-                    </div>
-                </div>
-                <div *ngIf="courses.length == 0" class="jumbotron">
-                    <div class="container">
-                        <h1 class="display-4">Aucun parcours trouvé</h1>
-                        <p class="lead">Vous n'avez pas encore créé de parcours pédagogique.</p>
-                        <p class="lead">Cliquez sur le bouton ajouter un parcours pédagogique pour commencer.</p>
-                    </div>
-                </div>
+            <div *ngFor="let course of courses" class="col-md-4">
+                <bw-course-user [course]="course" (removeCourse)="remove($event)"></bw-course-user>
             </div>
+        </div>
+    </div>
+    <div *ngIf="courses.length == 0" class="jumbotron">
+        <div class="container">
+            <h1 class="display-4">Aucun parcours trouvé</h1>
+            <p class="lead">Vous n'avez pas encore créé de parcours pédagogique.</p>
+            <p class="lead">Cliquez sur le bouton ajouter un parcours pédagogique pour commencer.</p>
         </div>
     </div>
 </div>

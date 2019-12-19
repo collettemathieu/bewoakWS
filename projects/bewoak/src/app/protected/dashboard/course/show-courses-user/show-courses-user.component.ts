@@ -18,7 +18,7 @@ export class ShowCoursesUserComponent implements OnInit {
     this.courses$ = this.courseStateUser.coursesByUser$;
   }
 
-  public remove(course: Course): void{
+  public remove(course: Course): void {
     this.courseStateUser.removeCourse(course);
   }
 
