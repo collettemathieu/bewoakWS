@@ -136,8 +136,7 @@ export class CourseService {
         level: { stringValue: course.level },
         userId: { stringValue: course.userId },
         dateAdd: { integerValue: course.dateAdd },
-        dateUpdate: { integerValue: course.dateUpdate },
-        dateDel: { integerValue: course.dateDel }
+        dateUpdate: { integerValue: course.dateUpdate }
       }
     };
   }
@@ -156,8 +155,7 @@ export class CourseService {
       level: fields.level.stringValue,
       userId: fields.userId.stringValue,
       dateAdd: fields.dateAdd.integerValue,
-      dateUpdate: fields.dateUpdate.integerValue,
-      dateDel: fields.dateDel.integerValue
+      dateUpdate: fields.dateUpdate.integerValue
     });
   }
 

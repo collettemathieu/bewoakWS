@@ -12,7 +12,6 @@ export class Course {
     level: typeCourseLevel; // Niveau de difficulté du parcours
     dateAdd: number;
     dateUpdate: number;
-    dateDel: number;
 
     constructor(options: {
         id?: string,
@@ -23,8 +22,7 @@ export class Course {
         userId: string,
         level: typeCourseLevel,
         dateAdd: number,
-        dateUpdate: number,
-        dateDel?: number
+        dateUpdate: number
     }) {
         this.id = options.id || '';
         this.name = options.name || '';
@@ -35,6 +33,5 @@ export class Course {
         this.level = options.level || 'Débutant';
         this.dateAdd = options.dateAdd || 0;
         this.dateUpdate = options.dateUpdate || 0;
-        this.dateDel = options.dateDel || 0;
     }
 }

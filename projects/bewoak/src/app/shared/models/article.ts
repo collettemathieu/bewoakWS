@@ -10,7 +10,6 @@ export class Article {
     avatarUrl: string;
     linkUrl: string; // Lien url de l'article
     dateAdd: number; // Date d'ajout de l'article en base
-    dateDel: number; // Date de suppression de l'article en base
     releaseDate: number; // Date de publication de l'article
     type: typeArticle;
     keywords: string;
@@ -27,7 +26,6 @@ export class Article {
         avatarUrl?: string,
         linkUrl?: string,
         dateAdd?: number,
-        dateDel?: number,
         releaseDate?: number,
         type?: typeArticle,
         keywords?: string,
@@ -43,7 +41,6 @@ export class Article {
         this.avatarUrl = options.avatarUrl || '';
         this.linkUrl = options.linkUrl || '';
         this.dateAdd = options.dateAdd || 0;
-        this.dateDel = options.dateDel || 0;
         this.releaseDate = options.releaseDate || 0;
         this.type = options.type || 'other';
         this.keywords = options.keywords || '';
