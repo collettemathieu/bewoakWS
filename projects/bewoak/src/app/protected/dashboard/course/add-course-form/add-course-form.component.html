@@ -1,8 +1,8 @@
-<form [formGroup]="formCourse" class="col-12 mx-auto mt-5 mb-5" (ngSubmit)="submit()" novalidate>
-    <div class="modal-body">
+<div class="modal-body">
+    <form [formGroup]="formCourse" class="col-12 mx-auto mt-5 mb-5" (ngSubmit)="submit()" novalidate>
         <div class="form-group">
-            <label for="name" class="col-4 col-form-label">Nom du parcours*</label>
-            <div class="col-8">
+            <label for="name" class="col-12 col-form-label">Nom du parcours*</label>
+            <div class="col-12">
                 <input id="name" formControlName="name" name="name" placeholder="Nom du parcours"
                     class="form-control here" type="text" autocomplete="false" autocorrect="false">
                 <small *ngIf="name.errors && name.dirty" class="form-text text-muted">
@@ -19,18 +19,20 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="role">Difficulté du parcours*</label>
-            <ngx-select-dropdown formControlName="levelControl" [multiple]="false" [options]="levels" [config]="config"
-                autocomplete="false" autocorrect="false"></ngx-select-dropdown>
-            <small *ngIf="levelControl.errors && levelControl.dirty" class="form-text text-muted">
-                <span [hidden]="!levelControl.errors.required">
-                    La difficulté du parcours est requise.
-                </span>
-            </small>
+            <label for="role" class="col-12 col-form-label">Difficulté du parcours*</label>
+            <div class="col-12">
+                <ngx-select-dropdown formControlName="levelControl" [multiple]="false" [options]="levels"
+                    [config]="config" autocomplete="false" autocorrect="false"></ngx-select-dropdown>
+                <small *ngIf="levelControl.errors && levelControl.dirty" class="form-text text-muted">
+                    <span [hidden]="!levelControl.errors.required">
+                        La difficulté du parcours est requise.
+                    </span>
+                </small>
+            </div>
         </div>
         <button type="submit" class="btn btn-primary float-right" [disabled]="!formCourse.valid"
             [ngClass]="{'btn-success': formCourse.valid, 'btn-default': !formCourse.valid}">
             Valider
         </button>
-    </div>
-</form>
+    </form>
+</div>
