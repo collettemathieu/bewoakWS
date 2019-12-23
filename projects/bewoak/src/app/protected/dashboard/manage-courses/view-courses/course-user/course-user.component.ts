@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
-import { Course } from '../../../../shared/models/course';
+import { Course } from '../../../../../shared/models/course';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({

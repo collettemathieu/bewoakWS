@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { AddCourseModalComponent } from '../add-course-modal/add-course-modal.component';
+import { AddCourseModalComponent } from '../shared/add-course-modal/add-course-modal.component';
 
 @Component({
   selector: 'bw-add-course',

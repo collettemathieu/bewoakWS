@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Course } from '../../../../shared/models/course';
-import { AuthService } from 'projects/bewoak/src/app/core/services/auth.service';
+import { Course } from '../../../../../shared/models/course';
+import { AuthService } from '../../../../../core/services/auth.service';
 import { Subscription } from 'rxjs';
-import { User } from '../../../../shared/models/user';
-import { CourseStateUserService } from 'projects/bewoak/src/app/core/services/course/course-state-user.service';
-import { CheckCourseNameValidator } from 'projects/bewoak/src/app/shared/validators/check-course-name.validator';
+import { User } from '../../../../../shared/models/user';
+import { CourseStateUserService } from '../../../../../core/services/course/course-state-user.service';
+import { CheckCourseNameValidator } from '../../../../../shared/validators/check-course-name.validator';
 
 @Component({
   selector: 'bw-add-course-form',

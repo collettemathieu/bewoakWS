@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
-import { CourseModule } from './course/course.module';
+import { ManageCoursesModule } from './manage-courses/manage-courses.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 
 
@@ -12,7 +12,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
     SharedModule,
     DashboardRoutingModule,
     ReactiveFormsModule,
-    CourseModule
+    ManageCoursesModule
   ]
 })
 export class DashboardModule { }

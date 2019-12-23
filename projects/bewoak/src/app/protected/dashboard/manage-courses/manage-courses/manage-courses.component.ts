@@ -5,10 +5,10 @@ import { CourseStateUserService } from '../../../../core/services/course/course-
 
 @Component({
   selector: 'bw-course',
-  templateUrl: './course.component.html',
-  styleUrls: ['./course.component.scss']
+  templateUrl: './manage-courses.component.html',
+  styleUrls: ['./manage-courses.component.scss']
 })
-export class CourseComponent implements OnInit {
+export class ManageCoursesComponent implements OnInit {
 
   private user: User;
 

@@ -8,7 +8,7 @@ import { SettingsComponent } from './settings/settings/settings.component';
 import { ProfileComponent } from './settings/profile/profile/profile.component';
 import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 import { AccountComponent } from './settings/account/account/account.component';
-import { CourseComponent } from './dashboard/course/course/course.component';
+import { ManageCoursesComponent } from './dashboard/manage-courses/manage-courses/manage-courses.component';
 
 
 const routes: Routes = [
@@ -22,7 +22,7 @@ const routes: Routes = [
         path: '',
         component: DashboardComponent,
         children: [
-          { path: 'manageCourse', component: CourseComponent }
+          { path: 'manageCourse', component: ManageCoursesComponent }
         ]
       },
     ]

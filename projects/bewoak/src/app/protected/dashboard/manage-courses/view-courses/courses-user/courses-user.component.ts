@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Course } from '../../../../shared/models/course';
-import { CourseStateUserService } from '../../../../core/services/course/course-state-user.service';
+import { Course } from '../../../../../shared/models/course';
+import { CourseStateUserService } from '../../../../../core/services/course/course-state-user.service';
 
 @Component({
-  selector: 'bw-show-courses-user',
-  templateUrl: './show-courses-user.component.html',
-  styleUrls: ['./show-courses-user.component.scss']
+  selector: 'bw-courses-user',
+  templateUrl: './courses-user.component.html',
+  styleUrls: ['./courses-user.component.scss']
 })
-export class ShowCoursesUserComponent implements OnInit {
+export class CoursesUserComponent implements OnInit {
 
   public courses$: Observable<Course[]>;
 
