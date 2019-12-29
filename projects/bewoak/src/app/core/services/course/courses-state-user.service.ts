@@ -8,7 +8,7 @@ import { ErrorService } from '../error.service';
 import { LoaderService } from '../loader.service';
 
 @Injectable()
-export class CourseStateUserService {
+export class CoursesStateUserService {
 
   // Etat des parcours pédagogiques d'un utilisateur
   private coursesByUser: BehaviorSubject<Course[]> = new BehaviorSubject([]);

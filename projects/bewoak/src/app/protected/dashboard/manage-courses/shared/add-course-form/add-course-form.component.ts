@@ -4,8 +4,9 @@ import { Course } from '../../../../../shared/models/course';
 import { AuthService } from '../../../../../core/services/auth.service';
 import { Subscription } from 'rxjs';
 import { User } from '../../../../../shared/models/user';
-import { CourseStateUserService } from '../../../../../core/services/course/course-state-user.service';
+import { CoursesStateUserService } from '../../../../../core/services/course/courses-state-user.service';
 import { CheckCourseNameValidator } from '../../../../../shared/validators/check-course-name.validator';
+import { CourseStateService } from 'projects/bewoak/src/app/core/services/course/course-state.service';
 
 @Component({
   selector: 'bw-add-course-form',
@@ -18,6 +19,7 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
   private closeModalParent: EventEmitter<boolean> = new EventEmitter(false);
 
   public formCourse: FormGroup;
+  private currentCourse: Course;
   // Options des difficultés du parcours pédagogique
   public levels: { id: number, name: string }[] = [
     {
@@ -47,8 +49,9 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private courseStateUserService: CourseStateUserService,
-    private checkCourseNameValidator: CheckCourseNameValidator
+    private coursesStateUserService: CoursesStateUserService,
+    private checkCourseNameValidator: CheckCourseNameValidator,
+    private courseStateService: CourseStateService
   ) { }
 
   ngOnInit() {
@@ -66,13 +69,16 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
    * Création du formulaire pour l'ajout d'un parcours pédagogique
    */
   private createForm(): FormGroup {
+    this.currentCourse = this.courseStateService.getCurrentCourse();
+    const nameCourse = this.currentCourse ? this.currentCourse.name : '';
+    const levelCourse = this.currentCourse ? this.currentCourse.level : '';
     return this.fb.group({
-      name: ['', {
+      name: [nameCourse, {
         validators: [Validators.required, Validators.minLength(3)],
         asyncValidators: [this.checkCourseNameValidator],
         updateOn: 'change'
       }],
-      levelControl: ['', [Validators.required]]
+      levelControl: [levelCourse, [Validators.required]]
     });
   }
 
@@ -88,8 +94,13 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
         dateAdd: Date.now(),
         dateUpdate: Date.now()
       };
-      const course = new Course(options);
-      this.courseStateUserService.register(course).subscribe();
+
+      if (this.currentCourse) {
+
+      } else {
+        const course = new Course(options);
+        this.coursesStateUserService.register(course).subscribe();
+      }
 
       // Fermeture de la fenêtre modale
       this.closeModalParent.emit(true);

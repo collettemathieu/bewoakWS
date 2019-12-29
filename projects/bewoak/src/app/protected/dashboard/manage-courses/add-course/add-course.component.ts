@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AddCourseModalComponent } from '../shared/add-course-modal/add-course-modal.component';
 
@@ -17,7 +17,7 @@ export class AddCourseComponent {
    * Ajout d'un nouveau parcours
    */
   addCourse() {
-    this.bsModelRef = this.modalService.show(AddCourseModalComponent, {class: 'modal-lg'});
+    this.bsModelRef = this.modalService.show(AddCourseModalComponent, { class: 'modal-lg' });
   }
 
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Course } from '../../../../../shared/models/course';
-import { CourseStateUserService } from '../../../../../core/services/course/course-state-user.service';
+import { CoursesStateUserService } from '../../../../../core/services/course/courses-state-user.service';
 
 @Component({
   selector: 'bw-courses-user',
@@ -12,7 +12,7 @@ export class CoursesUserComponent implements OnInit {
 
   public courses$: Observable<Course[]>;
 
-  constructor(private courseStateUser: CourseStateUserService) { }
+  constructor(private courseStateUser: CoursesStateUserService) { }
 
   ngOnInit() {
     this.courses$ = this.courseStateUser.coursesByUser$;

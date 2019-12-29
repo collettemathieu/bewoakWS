@@ -1,6 +1,9 @@
 import { Component, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { Course } from '../../../../../shared/models/course';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { Router } from '@angular/router';
+import { CourseStateService } from 'projects/bewoak/src/app/core/services/course/course-state.service';
+import { ToastrService } from 'projects/bewoak/src/app/core/services/toastr.service';
 
 @Component({
   selector: 'bw-course-user',
@@ -17,7 +20,12 @@ export class CourseUserComponent {
 
   public modalRef: BsModalRef;
 
-  constructor(private modalService: BsModalService) { }
+  constructor(
+    private modalService: BsModalService,
+    private router: Router,
+    private courseStateService: CourseStateService,
+    private toastrService: ToastrService
+  ) { }
 
   /**
    * Ouverture de la fenêtre modale de confirmation de suppression du parcours
@@ -32,6 +40,24 @@ export class CourseUserComponent {
    */
   public decline(): void {
     this.modalRef.hide();
+  }
+
+  /**
+   * Redirection vers la page d'édition du parcours pédagogique.
+   * Avant la redirection, on charge l'état du parcours via
+   * le service.
+   */
+  public edit(): void {
+    this.courseStateService.getCourse(this.course.id).subscribe(
+      _ => this.router.navigate(['dashboard/editCourse', this.course.id]),
+      _ => this.toastrService.showMessage(
+        {
+          type: 'danger',
+          message: 'Une erreur inconnue est survenue.'
+        }
+      )
+    );
+
   }
 
   /**

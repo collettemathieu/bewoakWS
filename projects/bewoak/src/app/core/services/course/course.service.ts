@@ -17,6 +17,31 @@ export class CourseService {
   ) { }
 
   /**
+   * Récupére le parcours pédagogique par son ID
+   * @param id Id du parcours pédagogique
+   */
+  public getCourse(id: string): Observable<Course> {
+    const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
+    const req = this.getStructureQueryById(id);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.httpClient.post(url, req, httpOptions).pipe(
+      switchMap((data: any) => {
+        const course: Course = this.getCourseFromFirestore(data[0].document.fields);
+        return of(course);
+      }),
+      catchError((error) => {
+        return this.errorService.handleError(error);
+      })
+    );
+  }
+
+
+  /**
    * Enregistrer un nouveau parcours pédagogique
    * @param course Le parcours pédagogique
    */
@@ -132,6 +157,7 @@ export class CourseService {
         id: { stringValue: course.id },
         name: { stringValue: course.name },
         url: { stringValue: course.url },
+        avatar: { stringValue: course.avatar },
         like: { integerValue: course.like },
         level: { stringValue: course.level },
         userId: { stringValue: course.userId },
@@ -151,6 +177,7 @@ export class CourseService {
       id: fields.id.stringValue,
       name: fields.name.stringValue,
       url: fields.url.stringValue,
+      avatar: fields.avatar.stringValue,
       like: fields.like.integerValue,
       level: fields.level.stringValue,
       userId: fields.userId.stringValue,
@@ -206,6 +233,33 @@ export class CourseService {
             op: 'EQUAL',
             value: {
               stringValue: name
+            }
+          }
+        }
+      }
+    };
+  }
+
+  /**
+   * Méthode pour le requêtage en base depuis firestore afin de récupérer le parcours
+   * pédagogique possédant l'ID demandé
+   * @param id Id du parcours pédagogique
+   * @return Une requête pour firestore
+   */
+  private getStructureQueryById(id: string): object {
+    return {
+      structuredQuery: {
+        from: [{
+          collectionId: 'courses'
+        }],
+        where: {
+          fieldFilter: {
+            field: {
+              fieldPath: 'id'
+            },
+            op: 'EQUAL',
+            value: {
+              stringValue: id
             }
           }
         }
