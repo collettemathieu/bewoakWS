@@ -76,7 +76,7 @@ export class CoursesStateUserService {
 
   /**
    * Suppression d'un parcours pédagogique
-   * @param course Le parcours à supprimer
+   * @param course Le parcours pédagogiqe à supprimer
    */
   public removeCourse(course: Course): void {
     // Mise en attente

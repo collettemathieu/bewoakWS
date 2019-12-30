@@ -6,20 +6,18 @@ import { Subscription } from 'rxjs';
 import { User } from '../../../../../shared/models/user';
 import { CoursesStateUserService } from '../../../../../core/services/course/courses-state-user.service';
 import { CheckCourseNameValidator } from '../../../../../shared/validators/check-course-name.validator';
-import { CourseStateService } from 'projects/bewoak/src/app/core/services/course/course-state.service';
+import { CourseStateService } from '../../../../../core/services/course/course-state.service';
 
 @Component({
   selector: 'bw-add-course-form',
   templateUrl: './add-course-form.component.html',
   styleUrls: ['./add-course-form.component.scss']
 })
-export class AddCourseFormComponent implements OnInit, OnDestroy {
+export class AddCourseFormComponent implements OnInit {
 
   @Output()
   private closeModalParent: EventEmitter<boolean> = new EventEmitter(false);
-
   public formCourse: FormGroup;
-  private currentCourse: Course;
   // Options des difficultés du parcours pédagogique
   public levels: { id: number, name: string }[] = [
     {
@@ -42,8 +40,10 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
     height: 'auto',
     placeholder: 'Sélectionner la difficulté',
   };
+  // Utilisateur courant
   public user: User;
-  private subscription: Subscription;
+  // Parcours pédagogique courant
+  private course: Course;
 
 
   constructor(
@@ -55,31 +55,37 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.course = this.courseStateService.getCurrentCourse();
+    this.user = this.authService.getCurrentUser();
     this.formCourse = this.createForm();
-    this.subscription = this.authService.user$.subscribe(
-      user => this.user = user
-    );
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.initForm();
   }
 
   /**
    * Création du formulaire pour l'ajout d'un parcours pédagogique
    */
   private createForm(): FormGroup {
-    this.currentCourse = this.courseStateService.getCurrentCourse();
-    const nameCourse = this.currentCourse ? this.currentCourse.name : '';
-    const levelCourse = this.currentCourse ? this.currentCourse.level : '';
     return this.fb.group({
-      name: [nameCourse, {
+      name: ['', {
         validators: [Validators.required, Validators.minLength(3)],
         asyncValidators: [this.checkCourseNameValidator],
         updateOn: 'change'
       }],
-      levelControl: [levelCourse, [Validators.required]]
+      levelControl: ['', [Validators.required]]
     });
+  }
+
+  /**
+   * Initialise le formulaire avec les valeurs du parcours pédagogique s'il existe.
+   */
+  private initForm(): void {
+    if (this.course) {
+      const currentLevel = this.levels.filter(level => level.name === this.course.level);
+      this.formCourse.setValue({
+        name: this.course.name,
+        levelControl: currentLevel
+      });
+    }
   }
 
   /**
@@ -95,8 +101,11 @@ export class AddCourseFormComponent implements OnInit, OnDestroy {
         dateUpdate: Date.now()
       };
 
-      if (this.currentCourse) {
-
+      if (this.course) {
+        this.course.name = this.name.value;
+        this.course.level = this.levelControl.value.name;
+        this.course.dateUpdate = Date.now();
+        this.courseStateService.updateCourse(this.course).subscribe();
       } else {
         const course = new Course(options);
         this.coursesStateUserService.register(course).subscribe();

@@ -40,6 +40,34 @@ export class CourseService {
     );
   }
 
+  /**
+   * Retourne les parcours pédagogiques de l'utilisateur
+   * @param userId L'identifiant de l'utilisateur
+   */
+  public getCoursesByUser(userId: string): Observable<Course[]> {
+    const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
+    const req = this.getStructureQueryByUser(userId);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return this.httpClient.post(url, req, httpOptions).pipe(
+      switchMap((data: any) => {
+        const courses: Course[] = [];
+        data.forEach(element => {
+          if (typeof element.document !== 'undefined') {
+            courses.push(this.getCourseFromFirestore(element.document.fields));
+          }
+        });
+        return of(courses);
+      }),
+      catchError((error) => {
+        return this.errorService.handleError(error);
+      })
+    );
+  }
+
 
   /**
    * Enregistrer un nouveau parcours pédagogique
@@ -73,26 +101,43 @@ export class CourseService {
   }
 
   /**
-   * Retourne les parcours pédagogiques de l'utilisateur
-   * @param userId L'identifiant de l'utilisateur
+   * Modifie un parcours pédagogique
+   * @param course Le parcours pédagogique
    */
-  public getCoursesByUser(userId: string): Observable<Course[]> {
-    const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
-    const req = this.getStructureQueryByUser(userId);
+  public update(course: Course): Observable<Course | null> {
+    const url = `${environment.firestore.baseUrlDocument}courses/${course.id}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
+    const dataCourse = this.getDataCourseForFirestore(course);
+    console.log(dataCourse);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     };
-    return this.httpClient.post(url, req, httpOptions).pipe(
+    return this.httpClient.patch<Course>(url, dataCourse, httpOptions).pipe(
       switchMap((data: any) => {
-        const courses: Course[] = [];
-        data.forEach(element => {
-          if (typeof element.document !== 'undefined') {
-            courses.push(this.getCourseFromFirestore(element.document.fields));
-          }
-        });
-        return of(courses);
+        return of(this.getCourseFromFirestore(data.fields));
+      }),
+      catchError((error) => {
+        return this.errorService.handleError(error);
+      })
+    );
+  }
+
+
+  /**
+   * Suppression d'un parcours pédagogique
+   * @param course Le parcours pédagogique à supprimer
+   */
+  public remove(course: Course): Observable<Course> {
+    const url = `${environment.firestore.baseUrlDocument}courses/${course.id}?key=${environment.firebase.apiKey}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return this.httpClient.delete(url, httpOptions).pipe(
+      switchMap(_ => {
+        return of(course);
       }),
       catchError((error) => {
         return this.errorService.handleError(error);
@@ -119,27 +164,6 @@ export class CourseService {
           return of(false);
         }
         return of(true);
-      }),
-      catchError((error) => {
-        return this.errorService.handleError(error);
-      })
-    );
-  }
-
-  /**
-   * Suppression d'un parcours pédagogique
-   * @param course Le parcours pédagogique à supprimer
-   */
-  public remove(course: Course): Observable<Course> {
-    const url = `${environment.firestore.baseUrlDocument}courses/${course.id}?key=${environment.firebase.apiKey}`;
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
-    return this.httpClient.delete(url, httpOptions).pipe(
-      switchMap(_ => {
-        return of(course);
       }),
       catchError((error) => {
         return this.errorService.handleError(error);

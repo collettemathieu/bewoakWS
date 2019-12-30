@@ -19,12 +19,13 @@ export class EditCourseComponent implements OnInit {
 
   ngOnInit() {
     // On s'abonne à l'état du parcours demandé
-    this.course$ = this.courseStateService.course;
+    this.course$ = this.courseStateService.course$;
 
   }
 
   public editCourse() {
     this.bsModelRef = this.modalService.show(AddCourseModalComponent, { class: 'modal-lg' });
+    this.bsModelRef.content.title = 'Modifier le parcours pédagogique';
   }
 
 }

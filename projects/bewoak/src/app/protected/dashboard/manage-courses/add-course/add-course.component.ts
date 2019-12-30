@@ -18,6 +18,7 @@ export class AddCourseComponent {
    */
   addCourse() {
     this.bsModelRef = this.modalService.show(AddCourseModalComponent, { class: 'modal-lg' });
+    this.bsModelRef.content.title = 'Nouveau parcours pédagogique';
   }
 
 }

@@ -8,6 +8,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 })
 export class AddCourseModalComponent {
 
+  public title: string;
 
   constructor(private bsModelRef: BsModalRef) { }
 
