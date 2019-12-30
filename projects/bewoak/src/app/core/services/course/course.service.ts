@@ -107,7 +107,6 @@ export class CourseService {
   public update(course: Course): Observable<Course | null> {
     const url = `${environment.firestore.baseUrlDocument}courses/${course.id}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
     const dataCourse = this.getDataCourseForFirestore(course);
-    console.log(dataCourse);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'

@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/cor
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Course } from '../../../../../shared/models/course';
 import { AuthService } from '../../../../../core/services/auth.service';
-import { Subscription } from 'rxjs';
 import { User } from '../../../../../shared/models/user';
 import { CoursesStateUserService } from '../../../../../core/services/course/courses-state-user.service';
 import { CheckCourseNameValidator } from '../../../../../shared/validators/check-course-name.validator';
@@ -41,7 +40,7 @@ export class AddCourseFormComponent implements OnInit {
     placeholder: 'Sélectionner la difficulté',
   };
   // Utilisateur courant
-  public user: User;
+  private user: User;
   // Parcours pédagogique courant
   private course: Course;
 
@@ -80,7 +79,7 @@ export class AddCourseFormComponent implements OnInit {
    */
   private initForm(): void {
     if (this.course) {
-      const currentLevel = this.levels.filter(level => level.name === this.course.level);
+      const currentLevel = this.levels.filter(level => level.name === this.course.level)[0];
       this.formCourse.setValue({
         name: this.course.name,
         levelControl: currentLevel
@@ -92,31 +91,33 @@ export class AddCourseFormComponent implements OnInit {
    * Validation du formulaire pour l'ajout d'un parcours pédagogique
    */
   public submit() {
-    if (this.formCourse.valid) {
-      const options = {
-        name: this.name.value,
-        level: this.levelControl.value.name,
-        userId: this.user.id,
-        dateAdd: Date.now(),
-        dateUpdate: Date.now()
-      };
-
-      if (this.course) {
-        this.course.name = this.name.value;
-        this.course.level = this.levelControl.value.name;
-        this.course.dateUpdate = Date.now();
-        this.courseStateService.updateCourse(this.course).subscribe();
-      } else {
-        const course = new Course(options);
-        this.coursesStateUserService.register(course).subscribe();
-      }
-
-      // Fermeture de la fenêtre modale
-      this.closeModalParent.emit(true);
+    if (!this.formCourse.valid) {
+      return;
     }
+
+    // Fermeture de la fenêtre modale
+    this.closeModalParent.emit(true);
+
+    // Parcours pédagogique existant
+    if (this.course) {
+      this.course.name = this.name.value;
+      this.course.level = this.levelControl.value.name;
+      this.course.dateUpdate = Date.now();
+      this.courseStateService.updateCourse(this.course).subscribe();
+      return;
+    }
+
+    // Nouveau parcours pédagogique
+    const course = new Course({
+      name: this.name.value,
+      level: this.levelControl.value.name,
+      userId: this.user.id,
+      dateAdd: Date.now(),
+      dateUpdate: Date.now()
+    });
+    this.coursesStateUserService.register(course).subscribe();
   }
 
   get name() { return this.formCourse.get('name'); }
   get levelControl() { return this.formCourse.get('levelControl'); }
-
 }
