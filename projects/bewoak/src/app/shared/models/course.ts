@@ -5,6 +5,7 @@ type typeCourseLevel = 'Débutant' | 'Intermédiaire' | 'Expert';
 export class Course {
     readonly id: string;
     name: string;
+    description: string;
     articles: Article[];
     url: string;
     avatar: string;
@@ -17,6 +18,7 @@ export class Course {
     constructor(options: {
         id?: string,
         name: string,
+        description: string,
         articles?: Article[],
         url?: string,
         avatar?: string,
@@ -28,6 +30,7 @@ export class Course {
     }) {
         this.id = options.id || '';
         this.name = options.name || '';
+        this.description = options.description || '';
         this.articles = options.articles || [];
         this.url = options.url || '';
         this.avatar = options.avatar || '';

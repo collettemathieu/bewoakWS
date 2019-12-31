@@ -70,6 +70,10 @@ export class AddCourseFormComponent implements OnInit {
         asyncValidators: [this.checkCourseNameValidator],
         updateOn: 'change'
       }],
+      description: ['', {
+        validators: [Validators.required, Validators.minLength(10)],
+        updateOn: 'change'
+      }],
       levelControl: ['', [Validators.required]]
     });
   }
@@ -82,6 +86,7 @@ export class AddCourseFormComponent implements OnInit {
       const currentLevel = this.levels.filter(level => level.name === this.course.level)[0];
       this.formCourse.setValue({
         name: this.course.name,
+        description: this.course.description,
         levelControl: currentLevel
       });
     }
@@ -101,6 +106,7 @@ export class AddCourseFormComponent implements OnInit {
     // Parcours pédagogique existant
     if (this.course) {
       this.course.name = this.name.value;
+      this.course.description = this.description.value;
       this.course.level = this.levelControl.value.name;
       this.course.dateUpdate = Date.now();
       this.courseStateService.updateCourse(this.course).subscribe();
@@ -110,6 +116,7 @@ export class AddCourseFormComponent implements OnInit {
     // Nouveau parcours pédagogique
     const course = new Course({
       name: this.name.value,
+      description: this.description.value,
       level: this.levelControl.value.name,
       userId: this.user.id,
       dateAdd: Date.now(),
@@ -119,5 +126,6 @@ export class AddCourseFormComponent implements OnInit {
   }
 
   get name() { return this.formCourse.get('name'); }
+  get description() { return this.formCourse.get('description'); }
   get levelControl() { return this.formCourse.get('levelControl'); }
 }

@@ -22,7 +22,7 @@ export class CourseService {
    */
   public getCourse(id: string): Observable<Course> {
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
-    const req = this.getStructureQueryById(id);
+    const req = this.getStructureQuery({ fieldPath: 'id', value: id });
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ export class CourseService {
    */
   public getCoursesByUser(userId: string): Observable<Course[]> {
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
-    const req = this.getStructureQueryByUser(userId);
+    const req = this.getStructureQuery({ fieldPath: 'userId', value: userId });
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -78,6 +78,7 @@ export class CourseService {
     const newCourse = new Course({
       id,
       name: course.name,
+      description: course.description,
       level: course.level,
       userId: course.userId,
       dateAdd: course.dateAdd,
@@ -150,7 +151,7 @@ export class CourseService {
    */
   public isAvailable(name: string): Observable<boolean> {
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
-    const req = this.getStructureQueryByName(name);
+    const req = this.getStructureQuery({ fieldPath: 'name', value: name });
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -179,6 +180,7 @@ export class CourseService {
       fields: {
         id: { stringValue: course.id },
         name: { stringValue: course.name },
+        description: { stringValue: course.description },
         url: { stringValue: course.url },
         avatar: { stringValue: course.avatar },
         like: { integerValue: course.like },
@@ -199,6 +201,7 @@ export class CourseService {
     return new Course({
       id: fields.id.stringValue,
       name: fields.name.stringValue,
+      description: fields.description.stringValue,
       url: fields.url.stringValue,
       avatar: fields.avatar.stringValue,
       like: fields.like.integerValue,
@@ -212,10 +215,10 @@ export class CourseService {
   /**
    * Méthode pour le requêtage en base depuis firestore afin de récupérer les parcours
    * pédagogiques de l'utilisateur
-   * @param userId Identifiant utilisateur
+   * @param field Le champ recherché avec sa valeur
    * @return Une requête pour firestore
    */
-  private getStructureQueryByUser(userId: string): object {
+  private getStructureQuery(field: { fieldPath: string, value: string }): object {
     return {
       structuredQuery: {
         from: [{
@@ -224,65 +227,11 @@ export class CourseService {
         where: {
           fieldFilter: {
             field: {
-              fieldPath: 'userId'
+              fieldPath: field.fieldPath
             },
             op: 'EQUAL',
             value: {
-              stringValue: userId
-            }
-          }
-        }
-      }
-    };
-  }
-
-  /**
-   * Méthode pour le requêtage en base depuis firestore afin de récupérer les parcours
-   * pédagogiques possédant le nom name
-   * @param name Nom du parcours pédagogique
-   * @return Une requête pour firestore
-   */
-  private getStructureQueryByName(name: string): object {
-    return {
-      structuredQuery: {
-        from: [{
-          collectionId: 'courses'
-        }],
-        where: {
-          fieldFilter: {
-            field: {
-              fieldPath: 'name'
-            },
-            op: 'EQUAL',
-            value: {
-              stringValue: name
-            }
-          }
-        }
-      }
-    };
-  }
-
-  /**
-   * Méthode pour le requêtage en base depuis firestore afin de récupérer le parcours
-   * pédagogique possédant l'ID demandé
-   * @param id Id du parcours pédagogique
-   * @return Une requête pour firestore
-   */
-  private getStructureQueryById(id: string): object {
-    return {
-      structuredQuery: {
-        from: [{
-          collectionId: 'courses'
-        }],
-        where: {
-          fieldFilter: {
-            field: {
-              fieldPath: 'id'
-            },
-            op: 'EQUAL',
-            value: {
-              stringValue: id
+              stringValue: field.value
             }
           }
         }
