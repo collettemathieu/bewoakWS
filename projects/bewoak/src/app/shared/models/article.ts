@@ -21,7 +21,7 @@ export class Article {
 
     constructor(options: {
         id?: string,
-        title?: string,
+        title: string,
         description?: string,
         avatarUrl?: string,
         linkUrl?: string,

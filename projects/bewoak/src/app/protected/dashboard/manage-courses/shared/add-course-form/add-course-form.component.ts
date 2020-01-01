@@ -66,7 +66,7 @@ export class AddCourseFormComponent implements OnInit {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', {
-        validators: [Validators.required, Validators.minLength(3)],
+        validators: [Validators.required, Validators.minLength(3), Validators.maxLength(100)],
         asyncValidators: [this.checkCourseNameValidator],
         updateOn: 'change'
       }],
