@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseStateService } from '../../../../../core/services/course/course-state.service';
 import { Observable } from 'rxjs';
-import { Course } from 'projects/bewoak/src/app/shared/models/course';
+import { Course } from '../../../../../shared/models/course';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AddCourseModalComponent } from '../../shared/add-course-modal/add-course-modal.component';
 
@@ -13,7 +13,7 @@ import { AddCourseModalComponent } from '../../shared/add-course-modal/add-cours
 export class EditCourseComponent implements OnInit {
 
   public course$: Observable<Course | null>;
-  public bsModelRef: BsModalRef;
+  private bsModelRef: BsModalRef;
 
   constructor(private courseStateService: CourseStateService, private modalService: BsModalService) { }
 

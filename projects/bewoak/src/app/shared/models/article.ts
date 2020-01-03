@@ -6,7 +6,7 @@ type typeLevel = 'bac' | 'bac+1' | 'bac+2' | 'bac+3' | 'bac+4' | 'bac+5' | 'bac+
 export class Article {
     readonly id: string;
     title: string;
-    description: string;
+    courseIds: Array<string>;
     avatarUrl: string;
     linkUrl: string; // Lien url de l'article
     dateAdd: number; // Date d'ajout de l'article en base
@@ -22,7 +22,7 @@ export class Article {
     constructor(options: {
         id?: string,
         title: string,
-        description?: string,
+        courseIds: Array<string>,
         avatarUrl?: string,
         linkUrl?: string,
         dateAdd?: number,
@@ -37,7 +37,7 @@ export class Article {
     }) {
         this.id = options.id || '';
         this.title = options.title || '';
-        this.description = options.description || '';
+        this.courseIds = options.courseIds || [];
         this.avatarUrl = options.avatarUrl || '';
         this.linkUrl = options.linkUrl || '';
         this.dateAdd = options.dateAdd || 0;

@@ -1,0 +1,23 @@
+<div class="modal-body">
+    <form [formGroup]="formArticle" class="col-12 mx-auto mt-5 mb-5" (ngSubmit)="submit()" novalidate>
+        <div class="form-group">
+            <label for="title" class="col-12 col-form-label">Titre de l'article*</label>
+            <div class="col-12">
+                <input id="title" formControlName="title" name="title" placeholder="Titre de l'article"
+                    class="form-control here" type="text" autocomplete="false" autocorrect="false">
+                <small *ngIf="title.errors && title.dirty" class="form-text text-muted">
+                    <span [hidden]="!title.errors.required">
+                        Un titre d'article est requis
+                    </span>
+                    <span [hidden]="!title.errors.minlength">
+                        Le titre de l'article doit comporter au moins 3 caractères.
+                    </span>
+                </small>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary float-right" [disabled]="!formArticle.valid"
+            [ngClass]="{'btn-success': formArticle.valid, 'btn-default': !formArticle.valid}">
+            Valider
+        </button>
+    </form>
+</div>

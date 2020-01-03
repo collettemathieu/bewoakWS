@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
-  selector: 'bw-add-course-modal',
-  templateUrl: './add-course-modal.component.html',
-  styleUrls: ['./add-course-modal.component.scss']
+  selector: 'bw-add-article-modal',
+  templateUrl: './add-article-modal.component.html',
+  styleUrls: ['./add-article-modal.component.scss']
 })
-export class AddCourseModalComponent {
+export class AddArticleModalComponent {
 
   public title: string;
 
@@ -28,5 +28,4 @@ export class AddCourseModalComponent {
       this.closeModal();
     }
   }
-
 }
