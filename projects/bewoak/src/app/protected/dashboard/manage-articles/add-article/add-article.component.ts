@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AddArticleModalComponent } from '../add-article-modal/add-article-modal.component';
 
@@ -7,15 +7,15 @@ import { AddArticleModalComponent } from '../add-article-modal/add-article-modal
   templateUrl: './add-article.component.html',
   styleUrls: ['./add-article.component.scss']
 })
-export class AddArticleComponent implements OnInit {
+export class AddArticleComponent {
 
   private bsModelRef: BsModalRef;
 
   constructor(private modalService: BsModalService) { }
 
-  ngOnInit() {
-  }
-
+  /**
+   * Modal pour l'ajout d'un nouvel article
+   */
   public addArticle() {
     this.bsModelRef = this.modalService.show(AddArticleModalComponent, { class: 'modal-lg' });
     this.bsModelRef.content.title = 'Ajouter un article au parcours';

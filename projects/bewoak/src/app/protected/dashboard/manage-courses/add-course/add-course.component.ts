@@ -14,7 +14,7 @@ export class AddCourseComponent {
   constructor(private modalService: BsModalService) { }
 
   /**
-   * Ajout d'un nouveau parcours
+   * Modal pour l'ajout d'un nouveau parcours
    */
   addCourse() {
     this.bsModelRef = this.modalService.show(AddCourseModalComponent, { class: 'modal-lg' });

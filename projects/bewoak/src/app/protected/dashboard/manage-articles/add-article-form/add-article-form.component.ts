@@ -1,5 +1,9 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ArticleService } from '../../../../core/services/article/article.service';
+import { CourseStateService } from '../../../../core/services/course/course-state.service';
+import { Course } from '../../../../shared/models/course';
+import { Article } from '../../../../shared/models/article';
 
 @Component({
   selector: 'bw-add-article-form',
@@ -8,11 +12,14 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class AddArticleFormComponent implements OnInit {
 
+  @Output()
   private closeModalArticle: EventEmitter<boolean> = new EventEmitter(false);
   public formArticle: FormGroup;
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private articleService: ArticleService,
+    private courseStateService: CourseStateService
   ) { }
 
   ngOnInit() {
@@ -35,11 +42,22 @@ export class AddArticleFormComponent implements OnInit {
   /**
    * Validation du formulaire pour l'ajout d'un parcours pédagogique
    */
-  public submit() {
+  public submit(): void {
     if (!this.formArticle.valid) {
       return;
     }
-    console.log('submitted');
+    
+    const course: Course = this.courseStateService.getCurrentCourse();
+
+    const article = new Article({
+      title: this.title.value,
+      courseIds: [course.id],
+      dateAdd: Date.now()
+    });
+    
+    // Ajout de l'article
+    this.articleService.addArticle(article).subscribe();
+
     // Fermeture de la fenêtre modale
     this.closeModalArticle.emit(true);
 
