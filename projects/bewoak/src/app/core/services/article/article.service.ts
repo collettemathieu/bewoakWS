@@ -26,6 +26,35 @@ export class ArticleService {
   }
 
   /**
+   * Retourne l'ensemble des articles par ordre d'apparition d'un parcours pédagogique
+   * @param id Id du parcours pédagogique
+   */
+  public getArticlesForCourse(id: string): Observable<Article[]> {
+
+    const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
+    const req = this.getStructureQuery({ fieldPath: 'courseIds', value: id });
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return this.httpClient.post(url, req, httpOptions).pipe(
+      switchMap((data: any) => {
+        const articles: Array<Article> =[];
+        data.forEach(element => {
+          if(element.document && typeof element.document!= 'undefined'){
+            articles.push(this.getArticleFromFirestore(element.document.fields));
+          }
+        });
+        return of(articles);
+      }),
+      catchError((error) => {
+        return this.errorService.handleError(error);
+      })
+    );
+  }
+
+  /**
    * Ajout d'un article. Si l'article existe déjà, l'id du parcours pédaogique sera uniqument ajouté à son
    * tableau d'ids.
    * @param article L'article à ajouter
@@ -133,7 +162,7 @@ export class ArticleService {
             field: {
               fieldPath: field.fieldPath
             },
-            op: 'EQUAL',
+            op: 'ARRAY_CONTAINS',
             value: {
               stringValue: field.value
             }

@@ -6,6 +6,8 @@ import { LoaderService } from '../loader.service';
 import { ErrorService } from '../error.service';
 import { tap, catchError, finalize } from 'rxjs/operators';
 import { ToastrService } from '../toastr.service';
+import { ArticleService } from '../article/article.service';
+import { Article } from '../../../shared/models/article';
 
 @Injectable()
 export class CourseStateService {
@@ -15,6 +17,7 @@ export class CourseStateService {
 
   constructor(
     private courseService: CourseService,
+    private articleService: ArticleService,
     private loaderService: LoaderService,
     private errorService: ErrorService,
     private toastrService: ToastrService
@@ -22,6 +25,7 @@ export class CourseStateService {
 
   /**
    * Récupère le parcours pédagogique en fonction de son ID
+   * avec les articles qu'il contient dans l'ordre d'apparition
    * @param id Id du parcours pédagogique
    * @return Une observable du parcours pédagogique
    */
@@ -30,7 +34,16 @@ export class CourseStateService {
     this.loaderService.setLoading(true);
 
     return this.courseService.getCourse(id).pipe(
-      tap(course => this.course.next(course)),
+      tap(course => {
+        this.articleService.getArticlesForCourse(course.id).subscribe(
+          articles => {
+            articles.forEach(article => {
+              course.articles.push(new Article(article));
+            });
+          }
+        );
+        this.course.next(course);
+      }),
       catchError(error => this.errorService.handleError(error)),
       finalize(() => {
         // Fin mise en attente
