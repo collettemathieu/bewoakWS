@@ -1,5 +1,5 @@
 <div *ngIf="(course$ | async) as course">
-    <div *ngIf="course.length != 0" class="container">
+    <div *ngIf="course" class="container">
         <div class="row">
             <h1>{{course.name}}</h1>
             <svg (click)="editCourse()" class="bd-placeholder-img" width="100%" height="125" viewBox="0 0 100 100"

@@ -46,7 +46,7 @@ export class AddArticleFormComponent implements OnInit {
     if (!this.formArticle.valid) {
       return;
     }
-    
+
     const course: Course = this.courseStateService.getCurrentCourse();
 
     const article = new Article({
@@ -54,9 +54,11 @@ export class AddArticleFormComponent implements OnInit {
       courseIds: [course.id],
       dateAdd: Date.now()
     });
-    
+
     // Ajout de l'article
-    this.articleService.addArticle(article).subscribe();
+    this.articleService.addArticle(article).subscribe(
+      _ => this.courseStateService.getCourse(course.id).subscribe()
+    );
 
     // Fermeture de la fenêtre modale
     this.closeModalArticle.emit(true);

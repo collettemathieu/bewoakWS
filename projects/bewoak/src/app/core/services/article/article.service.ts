@@ -40,9 +40,9 @@ export class ArticleService {
     };
     return this.httpClient.post(url, req, httpOptions).pipe(
       switchMap((data: any) => {
-        const articles: Array<Article> =[];
+        const articles: Array<Article> = [];
         data.forEach(element => {
-          if(element.document && typeof element.document!= 'undefined'){
+          if (element.document && typeof element.document !== 'undefined') {
             articles.push(this.getArticleFromFirestore(element.document.fields));
           }
         });
