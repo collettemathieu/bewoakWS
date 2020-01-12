@@ -2,7 +2,7 @@
     <div *ngIf="courses?.length; else elseBlock" class="container">
         <div class="row">
             <div *ngFor="let course of courses" class="col-md-4">
-                <bw-course-user [course]="course" (removeCourse)="remove($event)"></bw-course-user>
+                <bw-search-course></bw-search-course>
             </div>
         </div>
     </div>

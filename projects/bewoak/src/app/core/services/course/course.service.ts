@@ -16,6 +16,30 @@ export class CourseService {
     private randomService: RandomService
   ) { }
 
+  public getCourses(search: string): Observable<Course[]> {
+    const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
+    const req = this.getStructureQuery({ fieldPath: 'name', value: search });
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return this.httpClient.post(url, req, httpOptions).pipe(
+      switchMap((data: any) => {
+        const courses: Course[] = [];
+        data.forEach(element => {
+          if (typeof element.document !== 'undefined') {
+            courses.push(this.getCourseFromFirestore(element.document.fields));
+          }
+        });
+        return of(courses);
+      }),
+      catchError((error) => {
+        return this.errorService.handleError(error);
+      })
+    );
+  }
+
   /**
    * Récupére le parcours pédagogique par son ID
    * @param id Id du parcours pédagogique

@@ -1,18 +1,20 @@
-<!-- Footer Elements -->
 <div class="container">
-    <!--Grid row-->
     <div class="row">
-        <!--Grid column-->
         <div class="col-md-6 mb-4">
-            <!-- Form -->
-            <form class="form-inline">
-                <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Effectuez une recherche"
-                    aria-label="Rechercher">
-                <i class="material-icons" aria-hidden="true">search</i>
+            <form [formGroup]="searchForm" class="form-inline" (ngSubmit)="submit()">
+                <input class="form-control form-control-sm mr-3 w-75" formControlName="search" type="text"
+                    placeholder="Effectuez une recherche" aria-label="Rechercher" autocomplete="false"
+                    autocorrect="false">
+                <button type="submit" class="btn btn-primary" [disabled]="!searchForm.valid"
+                    [ngClass]="{'btn-success': searchForm.valid, 'btn-default': !searchForm.valid}">
+                    <i class="material-icons" aria-hidden="true">search</i>
+                </button>
+                <small *ngIf="search.errors && search.dirty" class="form-text text-muted">
+                    <span [hidden]="!search.errors.required">
+                        Un nom de parcours est requis
+                    </span>
+                </small>
             </form>
-            <!-- Form -->
         </div>
-        <!--Grid column-->
     </div>
-    <!--Grid row-->
 </div>
