@@ -16,9 +16,13 @@ export class CourseService {
     private randomService: RandomService
   ) { }
 
+  /**
+   * Retourne les parcours pédagogiques en fonction d'un item de recherche
+   * @param search Item de recherche
+   */
   public getCourses(search: string): Observable<Course[]> {
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
-    const req = this.getStructureQuery({ fieldPath: 'name', value: search });
+    const req = this.getStructureQueryForSearching({ fieldPath: 'name', value: search });
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -254,6 +258,33 @@ export class CourseService {
               fieldPath: field.fieldPath
             },
             op: 'EQUAL',
+            value: {
+              stringValue: field.value
+            }
+          }
+        }
+      }
+    };
+  }
+
+  /**
+   * Méthode pour le requêtage en base depuis firestore afin de récupérer les parcours
+   * pédagogiques de l'utilisateur
+   * @param field Le champ recherché avec sa valeur
+   * @return Une requête pour firestore
+   */
+  private getStructureQueryForSearching(field: { fieldPath: string, value: string }): object {
+    return {
+      structuredQuery: {
+        from: [{
+          collectionId: 'courses'
+        }],
+        where: {
+          fieldFilter: {
+            field: {
+              fieldPath: 'name'
+            },
+            op: 'GREATER_THAN_OR_EQUAL',
             value: {
               stringValue: field.value
             }

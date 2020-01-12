@@ -22,7 +22,7 @@ export class SearchBarComponent implements OnInit {
    */
   private createForm(): FormGroup {
     return this.fb.group({
-      search: ['', [Validators.required]]
+      search: ['']
     });
   }
 

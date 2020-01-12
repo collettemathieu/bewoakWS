@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Course } from '../../../shared/models/course';
 
 @Component({
   selector: 'bw-search-course',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./search-course.component.scss']
 })
 export class SearchCourseComponent implements OnInit {
+  @Input()
+  public course: Course;
 
   constructor() { }
 
