@@ -10,7 +10,7 @@ import { LoaderService } from '../loader.service';
 export class CoursesStateSearchService {
 
   // Etat de la recherche de parcours pédagogiques
-  private searchCourses: BehaviorSubject<Course[]> = new BehaviorSubject([]);
+  private searchCourses: BehaviorSubject<Course[] | null> = new BehaviorSubject(null);
   public readonly searchCourses$: Observable<Course[]> = this.searchCourses.asObservable();
 
 

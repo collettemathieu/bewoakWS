@@ -286,7 +286,7 @@ export class CourseService {
             },
             op: 'GREATER_THAN_OR_EQUAL',
             value: {
-              stringValue: field.value
+              stringValue: [field.value]
             }
           }
         }
