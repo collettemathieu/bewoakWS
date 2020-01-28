@@ -106,6 +106,7 @@ export class CourseService {
     const newCourse = new Course({
       id,
       name: course.name,
+      keywords: course.keywords,
       description: course.description,
       level: course.level,
       userId: course.userId,
@@ -208,6 +209,11 @@ export class CourseService {
       fields: {
         id: { stringValue: course.id },
         name: { stringValue: course.name },
+        keywords: {
+          arrayValue: {
+            values: this.getKeywordsDataForFirestore(course)
+          }
+        },
         description: { stringValue: course.description },
         url: { stringValue: course.url },
         avatar: { stringValue: course.avatar },
@@ -229,6 +235,7 @@ export class CourseService {
     return new Course({
       id: fields.id.stringValue,
       name: fields.name.stringValue,
+      keywords: this.getKeywordsDataFromFirestore(fields.keywords.arrayValue),
       description: fields.description.stringValue,
       url: fields.url.stringValue,
       avatar: fields.avatar.stringValue,
@@ -238,6 +245,34 @@ export class CourseService {
       dateAdd: fields.dateAdd.integerValue,
       dateUpdate: fields.dateUpdate.integerValue
     });
+  }
+
+  /**
+   * Méthode pour la transformation des mots clés d'un parcours pédagogique vers le firestore
+   * @param course Le parcours pédagogique
+   * @return Un tableau de {stringValue: keyword}
+   */
+  private getKeywordsDataForFirestore(course: Course): object {
+    const keywords = [];
+    course.keywords.forEach((keyword: string) => {
+      keywords.push({
+        stringValue: keyword
+      });
+    });
+    return keywords;
+  }
+
+  /**
+   * Méthode pour la transformation des mots clés du firestore vers le parcours pédagogique
+   * @param keywords Les mots clés du parcours pédagogique
+   * @return Un tableau de mots clés du parcours
+   */
+  private getKeywordsDataFromFirestore(keywords: any): Array<string> {
+    const keywordsCourse = [];
+    keywords.values.forEach((value: any) => {
+      keywordsCourse.push(value.stringValue);
+    });
+    return keywordsCourse;
   }
 
   /**
@@ -282,11 +317,11 @@ export class CourseService {
         where: {
           fieldFilter: {
             field: {
-              fieldPath: 'name'
+              fieldPath: 'keywords'
             },
-            op: 'GREATER_THAN_OR_EQUAL',
+            op: 'ARRAY_CONTAINS',
             value: {
-              stringValue: [field.value]
+              stringValue: field.value
             }
           }
         }

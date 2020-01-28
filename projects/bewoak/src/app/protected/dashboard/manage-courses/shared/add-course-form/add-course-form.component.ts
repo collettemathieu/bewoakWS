@@ -74,6 +74,10 @@ export class AddCourseFormComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(10)],
         updateOn: 'change'
       }],
+      keywords: ['', {
+        validators: [Validators.required, Validators.minLength(3)],
+        updateOn: 'change'
+      }],
       levelControl: ['', [Validators.required]]
     });
   }
@@ -87,6 +91,7 @@ export class AddCourseFormComponent implements OnInit {
       this.formCourse.setValue({
         name: this.course.name,
         description: this.course.description,
+        keywords: this.getKeywordsFromArray(this.course.keywords),
         levelControl: currentLevel
       });
     }
@@ -106,6 +111,7 @@ export class AddCourseFormComponent implements OnInit {
     // Parcours pédagogique existant
     if (this.course) {
       this.course.name = this.name.value;
+      this.course.keywords = this.getKeywordsFromString(this.keywords.value);
       this.course.description = this.description.value;
       this.course.level = this.levelControl.value.name;
       this.course.dateUpdate = Date.now();
@@ -116,6 +122,7 @@ export class AddCourseFormComponent implements OnInit {
     // Nouveau parcours pédagogique
     const course = new Course({
       name: this.name.value,
+      keywords: this.getKeywordsFromString(this.keywords.value),
       description: this.description.value,
       level: this.levelControl.value.name,
       userId: this.user.id,
@@ -125,7 +132,24 @@ export class AddCourseFormComponent implements OnInit {
     this.coursesStateUserService.register(course).subscribe();
   }
 
+  /**
+   * Transforme un tableau de mots clés en une chaîne de caractère
+   * Le séparateur est la virgule
+   */
+  private getKeywordsFromArray(keywords: Array<string>): string {
+    return keywords.join();
+  }
+
+  /**
+   * Transforme une chaîne de caractère de mots clés en tableau
+   * Le séparateur est la virgule
+   */
+  private getKeywordsFromString(keywords: string): Array<string> {
+    return keywords.split(',');
+  }
+
   get name() { return this.formCourse.get('name'); }
   get description() { return this.formCourse.get('description'); }
+  get keywords() { return this.formCourse.get('keywords'); }
   get levelControl() { return this.formCourse.get('levelControl'); }
 }

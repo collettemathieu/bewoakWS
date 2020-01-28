@@ -37,6 +37,21 @@
             </div>
         </div>
         <div class="form-group">
+            <label for="keywords" class="col-12 col-form-label">Mots clés du parcours*</label>
+            <div class="col-12">
+                <input id="keywords" formControlName="keywords" name="keywords" placeholder="Mot clé 1, mot clé 2, ..."
+                    class="form-control here" type="text" autocomplete="false" autocorrect="false">
+                <small *ngIf="keywords.errors && keywords.dirty" class="form-text text-muted">
+                    <span [hidden]="!keywords.errors.required">
+                        Au moins un mot clé est requis afin d'identifier le parcours
+                    </span>
+                    <span [hidden]="!keywords.errors.minlength">
+                        Les mots clés doivent être séparés par des virgules
+                    </span>
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
             <label for="role" class="col-12 col-form-label">Difficulté du parcours*</label>
             <div class="col-12">
                 <ngx-select-dropdown formControlName="levelControl" [multiple]="false" [options]="levels"
