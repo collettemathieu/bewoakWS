@@ -75,7 +75,7 @@ export class AddCourseFormComponent implements OnInit {
         updateOn: 'change'
       }],
       keywords: ['', {
-        validators: [Validators.required, Validators.minLength(3)],
+        validators: [Validators.required, Validators.minLength(3), Validators.pattern('^([a-z\-]+(, )?)+$')],
         updateOn: 'change'
       }],
       levelControl: ['', [Validators.required]]
@@ -137,15 +137,16 @@ export class AddCourseFormComponent implements OnInit {
    * Le séparateur est la virgule
    */
   private getKeywordsFromArray(keywords: Array<string>): string {
-    return keywords.join();
+    return keywords.join(', ');
   }
 
   /**
    * Transforme une chaîne de caractère de mots clés en tableau
-   * Le séparateur est la virgule
+   * Le séparateur est la virgule. On ne conserve que les mots clés non vides
    */
   private getKeywordsFromString(keywords: string): Array<string> {
-    return keywords.split(',');
+    const result = keywords.split(', ');
+    return result.filter(keyword => keyword.length > 0);
   }
 
   get name() { return this.formCourse.get('name'); }

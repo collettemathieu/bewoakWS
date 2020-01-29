@@ -24,11 +24,12 @@
         <div class="form-group">
             <label for="description" class="col-12 col-form-label">Description du parcours*</label>
             <div class="col-12">
-                <textarea id="description" formControlName="description" name="description" placeholder="Description du parcours"
-                    class="form-control here" autocomplete="false" autocorrect="false"></textarea>
+                <textarea id="description" formControlName="description" name="description"
+                    placeholder="Description du parcours" class="form-control here" autocomplete="false"
+                    autocorrect="false"></textarea>
                 <small *ngIf="description.errors && description.dirty" class="form-text text-muted">
                     <span [hidden]="!description.errors.required">
-                        Une description pour le parcours est requise
+                        Une description pour le parcours est requise.
                     </span>
                     <span [hidden]="!description.errors.minlength">
                         La description du parcours doit comporter au moins 10 caractères.
@@ -39,14 +40,18 @@
         <div class="form-group">
             <label for="keywords" class="col-12 col-form-label">Mots clés du parcours*</label>
             <div class="col-12">
-                <input id="keywords" formControlName="keywords" name="keywords" placeholder="Mot clé 1, mot clé 2, ..."
+                <input id="keywords" formControlName="keywords" name="keywords" placeholder="Mot-clé un, mot-clé deux, ..."
                     class="form-control here" type="text" autocomplete="false" autocorrect="false">
                 <small *ngIf="keywords.errors && keywords.dirty" class="form-text text-muted">
                     <span [hidden]="!keywords.errors.required">
-                        Au moins un mot clé est requis afin d'identifier le parcours
+                        Au moins un mot clé est requis afin d'identifier le parcours.
                     </span>
                     <span [hidden]="!keywords.errors.minlength">
-                        Les mots clés doivent être séparés par des virgules
+                        Un mot clé d'au moins 3 caractères est requis.
+                    </span>
+                    <span [hidden]="!keywords.errors.pattern">
+                        Les mots clés doivent contenir uniquement des caractères minuscules et 
+                        être séparés par des virgules (informatique, angular, ...).
                     </span>
                 </small>
             </div>
