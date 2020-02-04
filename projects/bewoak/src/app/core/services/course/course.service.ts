@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Course } from '../../../shared/models/course';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpBackend } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
 import { ErrorService } from '../error.service';
 import { RandomService } from '../random.service';
@@ -10,11 +10,17 @@ import { RandomService } from '../random.service';
 @Injectable()
 export class CourseService {
 
+  private http: HttpClient;
+
   constructor(
     private httpClient: HttpClient,
     private errorService: ErrorService,
-    private randomService: RandomService
-  ) { }
+    private randomService: RandomService,
+    private handler: HttpBackend
+  ) {
+    // Requête Http sans intercepteur
+    this.http = new HttpClient(this.handler);
+  }
 
   /**
    * Retourne les parcours pédagogiques en fonction d'un item de recherche
@@ -28,7 +34,7 @@ export class CourseService {
         'Content-Type': 'application/json'
       })
     };
-    return this.httpClient.post(url, req, httpOptions).pipe(
+    return this.http.post(url, req, httpOptions).pipe(
       switchMap((data: any) => {
         const courses: Course[] = [];
         data.forEach(element => {
