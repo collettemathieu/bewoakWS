@@ -14,7 +14,7 @@ const lifeTime = 5000;
 })
 export class ToastrComponent implements OnInit, OnDestroy {
 
-  private toastrs: Toastr[] = [];
+  public toastrs: Toastr[] = [];
   private subscription: Subscription;
 
   constructor(private toastrService: ToastrService) { }

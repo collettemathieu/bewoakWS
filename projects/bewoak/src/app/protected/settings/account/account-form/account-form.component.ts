@@ -10,9 +10,9 @@ import { AuthService } from '../../../../core/services/auth.service';
 })
 export class AccountFormComponent implements OnInit {
 
-  private formAccount: FormGroup;
+  public formAccount: FormGroup;
 
-  private user: User;
+  public user: User;
 
   constructor(private fb: FormBuilder, private authService: AuthService) { }
 

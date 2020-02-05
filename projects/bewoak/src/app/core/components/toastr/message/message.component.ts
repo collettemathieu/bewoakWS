@@ -9,7 +9,7 @@ import { Toastr } from '../../../../shared/interface/toastr';
 export class MessageComponent {
 
   @Input('toastr')
-  private message: Toastr;
+  public message: Toastr;
 
   @Output()
   private closeMessageEmitter: EventEmitter<Toastr> = new EventEmitter();

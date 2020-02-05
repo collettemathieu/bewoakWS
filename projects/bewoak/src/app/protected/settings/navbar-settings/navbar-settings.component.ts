@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
 })
 export class NavbarSettingsComponent implements OnInit {
 
-  private profilePath = 'settings/profile';
-  private accountPath = 'settings/account';
+  public profilePath = 'settings/profile';
+  public accountPath = 'settings/account';
 
   constructor(private router: Router) { }
 
@@ -20,7 +20,7 @@ export class NavbarSettingsComponent implements OnInit {
    * Retourne si la lien demandée est le lien actif
    * @param path chemin demandé
    */
-  private isActive(path: string): boolean {
+  public isActive(path: string): boolean {
     return this.router.isActive(path, true); // L'url est exact
   }
 
@@ -28,7 +28,7 @@ export class NavbarSettingsComponent implements OnInit {
    * Redirige l'utilisateur vers le lien demandé
    * @param path chemin demandé
    */
-  private navigate(path: string): void {
+  public navigate(path: string): void {
     this.router.navigate([path]);
   }
 

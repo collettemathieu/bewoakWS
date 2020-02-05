@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class LoaderComponent implements OnInit {
 
-  private $isLoading: Observable<boolean>;
+  public $isLoading: Observable<boolean>;
 
   constructor(private loaderService: LoaderService) { }
 

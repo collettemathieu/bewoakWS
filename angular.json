@@ -22,7 +22,7 @@
             "main": "projects/bewoak/src/main.ts",
             "polyfills": "projects/bewoak/src/polyfills.ts",
             "tsConfig": "projects/bewoak/tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "projects/bewoak/src/favicon.ico",
               "projects/bewoak/src/assets"
@@ -46,7 +46,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
