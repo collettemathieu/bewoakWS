@@ -51,7 +51,10 @@ export class AddArticleFormComponent implements OnInit {
 
     const article = new Article({
       title: this.title.value,
-      courseIds: [course.id],
+      courseIds: [{
+        courseId: course.id,
+        order: 1
+      }],
       dateAdd: Date.now()
     });
 

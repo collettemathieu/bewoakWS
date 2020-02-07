@@ -32,7 +32,7 @@ export class ArticleService {
   public getArticlesForCourse(id: string): Observable<Article[]> {
 
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
-    const req = this.getStructureQuery({ fieldPath: 'courseIds', value: id });
+    const req = this.getStructureQuery({ fieldPath: 'courseIds.courseId', value: id });
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -125,9 +125,18 @@ export class ArticleService {
    */
   private getCourseIdsDataForFirestore(article: Article): object {
     const courseIds = [];
-    article.courseIds.forEach(id => {
+    article.courseIds.forEach(value => {
       courseIds.push({
-        stringValue: id
+        mapValue: {
+          fields: {
+            courseId: {
+              stringValue: value.courseId
+            },
+            order: {
+              stringValue: value.order
+            }
+          }
+        }
       });
     });
     return courseIds;

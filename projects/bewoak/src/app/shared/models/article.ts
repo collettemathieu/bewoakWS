@@ -3,10 +3,11 @@ import { Chapter } from './chapter';
 type typeArticle = 'book' | 'article' | 'video' | 'other';
 type typeLevel = 'bac' | 'bac+1' | 'bac+2' | 'bac+3' | 'bac+4' | 'bac+5' | 'bac+>5';
 
+
 export class Article {
     readonly id: string;
     title: string;
-    courseIds: Array<string>;
+    courseIds: Array<{ courseId: string, order: number }>;
     avatarUrl: string;
     linkUrl: string; // Lien url de l'article
     dateAdd: number; // Date d'ajout de l'article en base
@@ -22,7 +23,7 @@ export class Article {
     constructor(options: {
         id?: string,
         title: string,
-        courseIds: Array<string>,
+        courseIds: Array<{ courseId: string, order: number }>,
         avatarUrl?: string,
         linkUrl?: string,
         dateAdd?: number,
