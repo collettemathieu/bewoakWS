@@ -9,6 +9,10 @@ export class ErrorService {
 
   constructor(private toastrService: ToastrService) { }
 
+  /**
+   * Traite l'erreur en envoyant un message d'information à l'utilisateur
+   * @param error L'erreur à afficher
+   */
   public handleError(error: any): Observable<never> {
     this.toastrService.showMessage({
       type: 'danger',

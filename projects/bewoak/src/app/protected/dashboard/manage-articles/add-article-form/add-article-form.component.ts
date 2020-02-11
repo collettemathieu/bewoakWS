@@ -48,10 +48,12 @@ export class AddArticleFormComponent implements OnInit {
     }
 
     const course: Course = this.courseStateService.getCurrentCourse();
-
+    const order = {};
+    order[course.id] = 1;
     const article = new Article({
       title: this.title.value,
       courseIds: [course.id],
+      orderByCourseId: order,
       dateAdd: Date.now()
     });
 

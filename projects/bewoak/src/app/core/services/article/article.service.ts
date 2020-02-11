@@ -66,6 +66,7 @@ export class ArticleService {
       id,
       title: article.title,
       courseIds: article.courseIds,
+      orderByCourseId: article.orderByCourseId,
       dateAdd: article.dateAdd
     });
     const url = `${environment.firestore.baseUrlDocument}articles?key=${environment.firebase.apiKey}&documentId=${id}`;
@@ -99,6 +100,11 @@ export class ArticleService {
             values: this.getCourseIdsDataForFirestore(article)
           }
         },
+        orderByCourseId: {
+          mapValue: {
+            fields: this.getOrderByCourseIdDataForFirestore(article)
+          }
+        },
         dateAdd: { integerValue: article.dateAdd }
       }
     };
@@ -113,7 +119,8 @@ export class ArticleService {
     return new Article({
       id: fields.id.stringValue,
       title: fields.title.stringValue,
-      courseIds: fields.courseIds.stringValue,
+      courseIds: this.getCourseIdsDataFromFirestore(fields.courseIds),
+      orderByCourseId: this.getOrderByCourseIdDataFromFirestore(fields.orderByCourseId),
       dateAdd: fields.dateAdd.integerValue
     });
   }
@@ -134,16 +141,48 @@ export class ArticleService {
   }
 
   /**
+   * Méthode pour la transformation des ordres de l'article par parcours pédagogique vers le firestore
+   * @param article L'article courant
+   * @return Un tableau de {stringValue: id}
+   */
+  private getOrderByCourseIdDataForFirestore(article: Article): object {
+    const orderBycourseId = {};
+    for (const key in article.orderByCourseId) {
+      if (article.orderByCourseId.hasOwnProperty(key)) {
+        orderBycourseId[key] = {
+          integerValue: article.orderByCourseId[key]
+        }
+      }
+    }
+    return orderBycourseId;
+  }
+
+  /**
    * Méthode pour la transformation des ids des parcours pédagogiques rendu par firestore vers l'article
    * @param ids Ids formatés des parcours pédagogique de l'article courant
    * @return Un tableau des ids des parcours pédagogiques de l'article
    */
   private getCourseIdsDataFromFirestore(ids: any): Array<string> {
     const courseIds = [];
-    ids.values.forEach(value => {
+    ids.arrayValue.values.forEach(value => {
       courseIds.push(value.stringValue);
     });
     return courseIds;
+  }
+
+  /**
+   * Méthode pour la transformation des ordres par parcours pédagogique de l'article depuis le firestore vers l'article
+   * @param orders Ordre de l'article dans les parcours pédagogique formatés
+   * @return Un tableau des ordres de l'article par parcours pédagogique
+   */
+  private getOrderByCourseIdDataFromFirestore(orders: any): { [key: string]: number } {
+    const orderBycourseId = {};
+    for (const key in orders.mapValue.fields) {
+      if (orders.mapValue.fields.hasOwnProperty(key)) {
+        orderBycourseId[key] = +orders.mapValue.fields[key].integerValue;
+      }
+    }
+    return orderBycourseId;
   }
 
   /**
