@@ -40,7 +40,7 @@ export class AddArticleFormComponent implements OnInit {
   }
 
   /**
-   * Validation du formulaire pour l'ajout d'un parcours pédagogique
+   * Validation du formulaire pour l'ajout d'un article au parcours pédagogique
    */
   public submit(): void {
     if (!this.formArticle.valid) {
@@ -49,7 +49,7 @@ export class AddArticleFormComponent implements OnInit {
 
     const course: Course = this.courseStateService.getCurrentCourse();
     const order = {};
-    order[course.id] = 1;
+    order[course.id] = course.articles.length + 1;
     const article = new Article({
       title: this.title.value,
       courseIds: [course.id],
