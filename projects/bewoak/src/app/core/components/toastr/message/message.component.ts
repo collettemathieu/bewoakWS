@@ -8,8 +8,8 @@ import { Toastr } from '../../../../shared/interface/toastr';
 })
 export class MessageComponent {
 
-  @Input('toastr')
-  public message: Toastr;
+  @Input()
+  public toastr: Toastr;
 
   @Output()
   private closeMessageEmitter: EventEmitter<Toastr> = new EventEmitter();
@@ -17,7 +17,7 @@ export class MessageComponent {
   constructor() { }
 
   public closeMessage() {
-    this.closeMessageEmitter.emit(this.message);
+    this.closeMessageEmitter.emit(this.toastr);
   }
 
 }

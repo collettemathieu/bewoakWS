@@ -1,3 +1,4 @@
-<alert type="{{ message.type }}" (click)="closeMessage()">
-    {{ message.message }}
+<alert type="{{ toastr.type }}">
+    <span (click)="closeMessage()" class="close" data-dismiss="alert" aria-label="close">&times;</span>
+    {{ toastr.message }}
 </alert>

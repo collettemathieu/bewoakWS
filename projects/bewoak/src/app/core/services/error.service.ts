@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ErrorHandler } from '@angular/core';
 import { ToastrService } from './toastr.service';
 import { throwError, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ErrorService {
+export class ErrorService implements ErrorHandler {
 
   constructor(private toastrService: ToastrService) { }
 
