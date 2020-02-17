@@ -6,10 +6,10 @@ import { RoleExpertGuard } from '../core/guards/role-expert.guard';
 import { RoleUserGuard } from '../core/guards/role-user.guard';
 import { SettingsComponent } from './settings/settings/settings.component';
 import { ProfileComponent } from './settings/profile/profile/profile.component';
-import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { AccountComponent } from './settings/account/account/account.component';
-import { ManageCoursesComponent } from './dashboard/manage-courses/manage-courses/manage-courses.component';
-import { EditCourseComponent } from './dashboard/manage-courses/edit-course/edit-course/edit-course.component';
+import { ManageCoursesComponent } from './dashboard/manage-courses/manage-courses.component';
+import { EditCourseComponent } from './dashboard/manage-courses/edit-course/edit-course.component';
 
 
 const routes: Routes = [

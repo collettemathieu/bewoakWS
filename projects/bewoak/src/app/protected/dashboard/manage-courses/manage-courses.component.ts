@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../../../../shared/models/user';
-import { AuthService } from '../../../../core/services/auth.service';
-import { CoursesStateUserService } from '../../../../core/services/course/courses-state-user.service';
-import { CourseStateService } from 'projects/bewoak/src/app/core/services/course/course-state.service';
+import { User } from '../../../shared/models/user';
+import { AuthService } from '../../../core/services/auth.service';
+import { CoursesStateUserService } from '../../../core/services/course/courses-state-user.service';
+import { CourseStateService } from '../../../core/services/course/course-state.service';
 
 @Component({
   selector: 'bw-course',

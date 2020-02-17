@@ -37,7 +37,7 @@ export class CourseStateService {
       tap(course => {
         this.articleService.getArticlesForCourse(course.id).subscribe(
           articles => {
-            articles.forEach(article => {
+            this.sortByOrder(articles).forEach(article => {
               course.articles.push(new Article(article));
             });
           }
@@ -92,6 +92,18 @@ export class CourseStateService {
    */
   public resetCourse(): void {
     this.course.next(null);
+  }
+
+  /**
+   * Tri les articles selon leur ordre d'apparition dans le parcours pédagogique
+   * @param articles Un tableau d'articles à trier
+   */
+  private sortByOrder(articles: Article[]) {
+    const idCourse: string = this.getCurrentCourse().id;
+
+    return articles.sort((a: Article, b: Article) => {
+      return a.orderByCourseId[idCourse] - b.orderByCourseId[idCourse];
+    });
   }
 
 }

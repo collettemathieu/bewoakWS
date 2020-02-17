@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Course } from '../../../../../shared/models/course';
-import { CoursesStateUserService } from '../../../../../core/services/course/courses-state-user.service';
+import { Course } from '../../../../shared/models/course';
+import { CoursesStateUserService } from '../../../../core/services/course/courses-state-user.service';
 
 @Component({
   selector: 'bw-courses-user',

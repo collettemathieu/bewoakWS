@@ -11,19 +11,10 @@
         <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
                 <button (click)="edit()" type="button" class="btn btn-sm btn-outline-secondary">Editer</button>
-                <button (click)="openModal(template)" type="button"
-                    class="btn btn-sm btn-outline-secondary">Supprimer</button>
+                <bw-remove-course (removeCourse)="remove()"></bw-remove-course>
             </div>
             <small class="text-muted">édité le
                 {{course.dateUpdate | date: 'dd/MM/yyyy'}}</small>
         </div>
     </div>
 </div>
-
-<ng-template #template>
-    <div class="modal-body text-center">
-        <p>Souhaitez-vous réellement supprimer ce parcours ?</p>
-        <button type="button" class="btn btn-default" (click)="remove()">Oui, j'en suis sûr(e) !</button>
-        <button type="button" class="btn btn-primary" (click)="decline()">Euh... non en fait !</button>
-    </div>
-</ng-template>

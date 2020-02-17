@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CourseStateService } from '../../../../../core/services/course/course-state.service';
+import { CourseStateService } from '../../../../core/services/course/course-state.service';
 import { Observable, Subscription } from 'rxjs';
-import { Course } from '../../../../../shared/models/course';
+import { Course } from '../../../../shared/models/course';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { AddCourseModalComponent } from '../../shared/add-course-modal/add-course-modal.component';
+import { AddCourseModalComponent } from '../shared/add-course-modal/add-course-modal.component';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

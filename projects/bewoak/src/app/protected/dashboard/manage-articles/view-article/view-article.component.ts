@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Article } from 'projects/bewoak/src/app/shared/models/article';
 
 @Component({
@@ -6,14 +6,11 @@ import { Article } from 'projects/bewoak/src/app/shared/models/article';
   templateUrl: './view-article.component.html',
   styleUrls: ['./view-article.component.scss']
 })
-export class ViewArticleComponent implements OnInit {
+export class ViewArticleComponent {
 
   @Input()
   public article: Article;
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }

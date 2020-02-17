@@ -7,13 +7,13 @@ import { SharedModule } from '../../../shared/shared.module';
 import { AddCourseModalComponent } from './shared/add-course-modal/add-course-modal.component';
 import { AddCourseFormComponent } from './shared/add-course-form/add-course-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ManageCoursesComponent } from './manage-courses/manage-courses.component';
+import { ManageCoursesComponent } from './manage-courses.component';
 import { CourseService } from '../../../core/services/course/course.service';
 import { CoursesStateUserService } from '../../../core/services/course/courses-state-user.service';
 import { registerLocaleData } from '@angular/common';
-import { ViewCoursesModule } from './view-courses/view-courses.module';
 import { EditCourseModule } from './edit-course/edit-course.module';
 import { CourseStateService } from '../../../core/services/course/course-state.service';
+import { CoursesUserModule } from './courses-user/courses-user.module';
 registerLocaleData(localeFr, 'fr-FR');
 
 @NgModule({
@@ -22,8 +22,8 @@ registerLocaleData(localeFr, 'fr-FR');
     SharedModule,
     ReactiveFormsModule,
     ManageCoursesRoutingModule,
-    ViewCoursesModule,
-    EditCourseModule
+    EditCourseModule,
+    CoursesUserModule
   ],
   providers: [
     CourseService,
