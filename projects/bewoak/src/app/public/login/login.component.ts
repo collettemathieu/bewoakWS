@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ToastrService } from '../../../core/services/toastr.service';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'bw-login',
@@ -26,7 +25,7 @@ export class LoginComponent implements OnInit {
   /**
    * Création du formulaire de LogIn pour l'utilisateur
    */
-  createLoginForm(): FormGroup {
+  private createLoginForm(): FormGroup {
     return this.fb.group({
       email: ['', [Validators.email, Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]]
@@ -36,7 +35,7 @@ export class LoginComponent implements OnInit {
   /**
    * Soumission du formulaire de logIn et redirection si nécessaire
    */
-  submitForm(): void {
+  public submitForm(): void {
     if (this.loginForm.valid) {
       this.authService.login(this.email.value, this.password.value).subscribe(
         _ => this.router.navigate(['/home']),

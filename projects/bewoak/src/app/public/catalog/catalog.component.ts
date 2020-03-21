@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Article } from '../../../shared/models/article';
-import { ArticleService } from '../../../core/services/article/article.service';
+import { Article } from '../../shared/models/article';
+import { ArticleService } from '../../core/services/article/article.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -21,7 +21,7 @@ export class CatalogComponent implements OnInit {
   /**
    * Récupére la liste de tous les articles de bewoak
    */
-  getArticles(): Observable<Article[]> {
+  private getArticles(): Observable<Article[]> {
     return this.articleService.getArticles();
   }
 

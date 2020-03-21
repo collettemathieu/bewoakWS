@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { AuthService } from '../../../core/services/auth.service';
-import { RandomService } from '../../../core/services/random.service';
-import { FormUserService } from '../../../core/services/user/form-user.service';
-import { User } from '../../../shared/models/user';
+import { AuthService } from '../../core/services/auth.service';
+import { RandomService } from '../../core/services/random.service';
+import { FormUserService } from '../../core/services/user/form-user.service';
+import { User } from '../../shared/models/user';
 import { Router } from '@angular/router';
 
 @Component({
@@ -60,7 +60,7 @@ export class AddUserComponent implements OnInit {
   /**
    * Soummission du formulaire
    */
-  submitForm(): void {
+  public submitForm(): void {
     if (this.addUserForm.valid) {
       const options = {
         firstname: this.firstname.value,
@@ -86,7 +86,7 @@ export class AddUserComponent implements OnInit {
   /**
    * Redirection vers la page d'accueil
    */
-  goHome() {
+  public goHome() {
     this.router.navigate(['home']);
   }
 
