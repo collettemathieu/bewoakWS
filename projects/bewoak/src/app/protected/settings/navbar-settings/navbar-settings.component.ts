@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,15 +6,12 @@ import { Router } from '@angular/router';
   templateUrl: './navbar-settings.component.html',
   styleUrls: ['./navbar-settings.component.scss']
 })
-export class NavbarSettingsComponent implements OnInit {
+export class NavbarSettingsComponent {
 
   public profilePath = 'settings/profile';
   public accountPath = 'settings/account';
 
   constructor(private router: Router) { }
-
-  ngOnInit() {
-  }
 
   /**
    * Retourne si la lien demandée est le lien actif
