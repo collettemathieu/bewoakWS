@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class AddUserComponent implements OnInit {
 
-  public displayInfosUser = false; // Après enregistrement, affiche les informations de l'utilisateur
+  public formIsSubmitted = false; // Après enregistrement, affiche les informations de l'utilisateur
   public user: User = new User({});
   public passwordUser: string;
   public addUserForm: FormGroup;
@@ -77,7 +77,7 @@ export class AddUserComponent implements OnInit {
         user => {
           this.user = user;
           this.passwordUser = options.password;
-          this.displayInfosUser = true;
+          this.formIsSubmitted = true;
         }
       );
     }
