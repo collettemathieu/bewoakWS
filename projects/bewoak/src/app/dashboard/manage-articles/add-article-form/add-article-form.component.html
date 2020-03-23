@@ -1,16 +1,16 @@
 <div class="modal-body">
     <form [formGroup]="formArticle" class="col-12 mx-auto mt-5 mb-5" (ngSubmit)="submit()" novalidate>
         <div class="form-group">
-            <label for="title" class="col-12 col-form-label">Titre de l'article*</label>
+            <label for="doi" class="col-12 col-form-label">DOI de l'article*</label>
             <div class="col-12">
-                <input id="title" formControlName="title" name="title" placeholder="Titre de l'article"
+                <input id="doi" formControlName="doi" name="doi" placeholder="DOI de l'article"
                     class="form-control here" type="text" autocomplete="false" autocorrect="false">
-                <small *ngIf="title.errors && title.dirty" class="form-text text-muted">
-                    <span [hidden]="!title.errors.required">
-                        Un titre d'article est requis
+                <small *ngIf="doi.errors && doi.dirty" class="form-text text-muted">
+                    <span [hidden]="!doi.errors.required">
+                        Un identifiant DOI est requis
                     </span>
-                    <span [hidden]="!title.errors.minlength">
-                        Le titre de l'article doit comporter au moins 3 caractères.
+                    <span [hidden]="!doi.errors.pattern">
+                        Le DOI de l'article n'est pas valide.
                     </span>
                 </small>
             </div>

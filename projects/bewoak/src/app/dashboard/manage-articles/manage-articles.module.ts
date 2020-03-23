@@ -7,6 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { AddArticleFormComponent } from './add-article-form/add-article-form.component';
 import { AddArticleModalComponent } from './add-article-modal/add-article-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DoiArticleService } from '../../core/services/article/doi-article.service';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     ManageArticlesRoutingModule
   ],
+  providers: [DoiArticleService],
   exports: [AddArticleComponent, ViewArticleComponent],
   entryComponents: [AddArticleModalComponent]
 })

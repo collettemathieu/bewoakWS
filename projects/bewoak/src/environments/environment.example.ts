@@ -16,7 +16,7 @@ export const environment = {
     }
   },
   firestore: {
-    baseUrl: ''
+    baseUrlDocument: '',
   }
 };
 
