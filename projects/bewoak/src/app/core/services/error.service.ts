@@ -14,7 +14,6 @@ export class ErrorService implements ErrorHandler {
    * @param error L'erreur à afficher
    */
   public handleError(error: any): Observable<never> {
-    console.log(error);
     this.toastrService.showMessage({
       type: 'danger',
       message: error.error.error.message

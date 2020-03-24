@@ -1,16 +1,16 @@
 <div class="modal-body">
     <form [formGroup]="formArticle" class="col-12 mx-auto mt-5 mb-5" (ngSubmit)="submit()" novalidate>
         <div class="form-group">
-            <label for="doi" class="col-12 col-form-label">DOI de l'article*</label>
+            <label for="doi" class="col-12 col-form-label">Rechercher un article via son DOI*</label>
             <div class="col-12">
-                <input id="doi" formControlName="doi" name="doi" placeholder="DOI de l'article"
+                <input id="doi" formControlName="doi" name="doi" placeholder="Entrer un identifiant DOI (eg: 10.1000/123456...)"
                     class="form-control here" type="text" autocomplete="false" autocorrect="false">
                 <small *ngIf="doi.errors && doi.dirty" class="form-text text-muted">
                     <span [hidden]="!doi.errors.required">
                         Un identifiant DOI est requis
                     </span>
                     <span [hidden]="!doi.errors.pattern">
-                        Le DOI de l'article n'est pas valide.
+                        L'identifiant DOI n'est pas valide (eg: 10.1000/123456...).
                     </span>
                 </small>
             </div>

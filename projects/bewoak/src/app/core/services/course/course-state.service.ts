@@ -35,7 +35,7 @@ export class CourseStateService {
 
     return this.courseService.getCourse(id).pipe(
       tap(course => {
-        this.articleService.getArticlesForCourse(course.id).subscribe(
+        this.articleService.getCourseArticles(course.id).subscribe(
           articles => {
             this.sortByOrder(articles).forEach(article => {
               course.articles.push(new Article(article));

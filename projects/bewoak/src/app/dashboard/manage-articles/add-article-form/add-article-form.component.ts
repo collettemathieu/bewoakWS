@@ -4,7 +4,6 @@ import { ArticleService } from '../../../core/services/article/article.service';
 import { CourseStateService } from '../../../core/services/course/course-state.service';
 import { Course } from '../../../shared/models/course';
 import { Article } from '../../../shared/models/article';
-import { DoiArticleService } from '../../../core/services/article/doi-article.service';
 
 @Component({
   selector: 'bw-add-article-form',
@@ -20,7 +19,6 @@ export class AddArticleFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private articleService: ArticleService,
-    private doiArticleService: DoiArticleService,
     private courseStateService: CourseStateService
   ) { }
 
@@ -34,7 +32,7 @@ export class AddArticleFormComponent implements OnInit {
   private createForm(): FormGroup {
     return this.fb.group({
       doi: ['', {
-        validators: [Validators.required, Validators.pattern('[0-9]{2}.[0-9]{4,5}/.+')],
+        validators: [Validators.required, Validators.pattern('(https://doi.org/){0,1}[0-9]{2}.[0-9]{4,5}/.+')],
         asyncValidators: [],
         updateOn: 'change'
       }]
@@ -49,23 +47,15 @@ export class AddArticleFormComponent implements OnInit {
       return;
     }
 
-    this.doiArticleService.setCrossRefOptions({
-      pid: 'collettemathieu%40noolib.com',
-      format: 'unixsd'
-    });
-    this.doiArticleService.getArticle(this.doi.value).subscribe(
-      data => {
+    this.articleService.getArticleFromDoi(this.doi.value).subscribe(
+      article => {
 
         const course: Course = this.courseStateService.getCurrentCourse();
         const order = {};
         order[course.id] = course.articles.length + 1;
-
-        const article = new Article({
-          title: data.title,
-          courseIds: [course.id],
-          orderByCourseId: order,
-          dateAdd: Date.now()
-        });
+        article.courseIds = [course.id];
+        article.dateAdd = Date.now();
+        article.orderByCourseId = order;
 
         // Ajout de l'article
         this.articleService.addArticle(article).subscribe(

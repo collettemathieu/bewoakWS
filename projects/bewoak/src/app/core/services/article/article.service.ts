@@ -6,6 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { ErrorService } from '../error.service';
 import { RandomService } from '../random.service';
 import { switchMap, catchError } from 'rxjs/operators';
+import { ApiCrossRefServiceService } from './api-cross-ref-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class ArticleService {
   constructor(
     private httpClient: HttpClient,
     private errorService: ErrorService,
-    private randomService: RandomService
+    private randomService: RandomService,
+    private ApiCrossRefService: ApiCrossRefServiceService
   ) { }
 
   /**
@@ -29,7 +31,7 @@ export class ArticleService {
    * Retourne l'ensemble des articles par ordre d'apparition d'un parcours pédagogique
    * @param id Id du parcours pédagogique
    */
-  public getArticlesForCourse(id: string): Observable<Article[]> {
+  public getCourseArticles(id: string): Observable<Article[]> {
 
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
     const req = this.getStructureQuery({ fieldPath: 'courseIds', value: id });
@@ -52,6 +54,33 @@ export class ArticleService {
         return this.errorService.handleError(error);
       })
     );
+  }
+
+  /**
+   * Retourne l'article à partir de son DOI
+   * @param id Identifiant DOI de l'article
+   */
+  public getArticleFromDoi(doi: string): Observable<Article | null> {
+    this.ApiCrossRefService.setOptions({
+      pid: environment.apiCrossRef.pid
+    });
+    return this.ApiCrossRefService.getArticleData(doi).pipe(
+      switchMap(data => {
+        return of(new Article({
+          title: data.title
+        }));
+      }),
+      catchError(error => {
+        return this.errorService.handleError({
+          error: {
+            error: {
+              message: error.statusText
+            }
+          }
+        });
+      })
+    );
+
   }
 
   /**

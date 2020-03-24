@@ -17,6 +17,9 @@ export const environment = {
   },
   firestore: {
     baseUrlDocument: '',
+  },
+  apiCrossRef: {
+    pid: ''
   }
 };
 

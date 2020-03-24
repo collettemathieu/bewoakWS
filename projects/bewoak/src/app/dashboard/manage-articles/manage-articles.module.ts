@@ -7,7 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { AddArticleFormComponent } from './add-article-form/add-article-form.component';
 import { AddArticleModalComponent } from './add-article-modal/add-article-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DoiArticleService } from '../../core/services/article/doi-article.service';
+import { ApiCrossRefServiceService } from '../../core/services/article/api-cross-ref-service.service';
 
 
 @NgModule({
@@ -17,7 +17,7 @@ import { DoiArticleService } from '../../core/services/article/doi-article.servi
     ReactiveFormsModule,
     ManageArticlesRoutingModule
   ],
-  providers: [DoiArticleService],
+  providers: [ApiCrossRefServiceService],
   exports: [AddArticleComponent, ViewArticleComponent],
   entryComponents: [AddArticleModalComponent]
 })

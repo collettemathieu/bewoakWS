@@ -7,7 +7,7 @@ export class Article {
     readonly id: string;
     title: string;
     courseIds: Array<string>; // Id des parcours dans lequel l'article apparaît
-    orderByCourseId: {[key:string] : number}; // Ordre d'apparition de l'article par Id de parcours
+    orderByCourseId: { [key: string]: number }; // Ordre d'apparition de l'article par Id de parcours
     avatarUrl: string;
     linkUrl: string; // Lien url de l'article
     dateAdd: number; // Date d'ajout de l'article en base
@@ -23,8 +23,8 @@ export class Article {
     constructor(options: {
         id?: string,
         title: string,
-        courseIds: Array<string>,
-        orderByCourseId: {[key:string] : number},
+        courseIds?: Array<string>,
+        orderByCourseId?: { [key: string]: number },
         avatarUrl?: string,
         linkUrl?: string,
         dateAdd?: number,
