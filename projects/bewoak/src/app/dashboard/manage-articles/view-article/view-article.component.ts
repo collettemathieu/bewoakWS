@@ -10,7 +10,4 @@ export class ViewArticleComponent {
 
   @Input()
   public article: Article;
-
-  constructor() { }
-
 }

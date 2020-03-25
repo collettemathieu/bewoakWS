@@ -28,13 +28,39 @@ export class ArticleService {
   }
 
   /**
+   * Retourne l'article s'il existe
+   * @param doi Identifiant de l'article
+   */
+  public getArticle(doi: string): Observable<Article | null> {
+
+    const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
+    const req = this.getStructureQuery({ fieldPath: 'doi', value: doi, op: 'EQUAL' });
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return this.httpClient.post(url, req, httpOptions).pipe(
+      switchMap((data: any) => {
+        if(data.document){
+          return of(this.getArticleFromFirestore(data[0].document.fields));
+        }
+        return of(null);  
+      }),
+      catchError((error) => {
+        return this.errorService.handleError(error);
+      })
+    );
+  }
+
+  /**
    * Retourne l'ensemble des articles par ordre d'apparition d'un parcours pédagogique
    * @param id Id du parcours pédagogique
    */
   public getCourseArticles(id: string): Observable<Article[]> {
 
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
-    const req = this.getStructureQuery({ fieldPath: 'courseIds', value: id });
+    const req = this.getStructureQuery({ fieldPath: 'courseIds', value: id, op: 'ARRAY_CONTAINS' });
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -67,6 +93,7 @@ export class ArticleService {
     return this.ApiCrossRefService.getArticleData(doi).pipe(
       switchMap(data => {
         return of(new Article({
+          doi,
           title: data.title
         }));
       }),
@@ -89,17 +116,9 @@ export class ArticleService {
    * @param article L'article à ajouter
    */
   public addArticle(article: Article): Observable<Article> {
-    const id = this.randomService.generateId();
-
-    const newArticle = new Article({
-      id,
-      title: article.title,
-      courseIds: article.courseIds,
-      orderByCourseId: article.orderByCourseId,
-      dateAdd: article.dateAdd
-    });
-    const url = `${environment.firestore.baseUrlDocument}articles?key=${environment.firebase.apiKey}&documentId=${id}`;
-    const dataArticle = this.getDataArticleForFirestore(newArticle);
+    article.id = this.randomService.generateId();
+    const url = `${environment.firestore.baseUrlDocument}articles?key=${environment.firebase.apiKey}&documentId=${article.id}`;
+    const dataArticle = this.getDataArticleForFirestore(article);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -123,6 +142,7 @@ export class ArticleService {
     return {
       fields: {
         id: { stringValue: article.id },
+        doi: { stringValue: article.doi },
         title: { stringValue: article.title },
         courseIds: {
           arrayValue: {
@@ -147,6 +167,7 @@ export class ArticleService {
   private getArticleFromFirestore(fields: any): Article {
     return new Article({
       id: fields.id.stringValue,
+      doi: fields.doi.stringValue,
       title: fields.title.stringValue,
       courseIds: this.getCourseIdsDataFromFirestore(fields.courseIds),
       orderByCourseId: this.getOrderByCourseIdDataFromFirestore(fields.orderByCourseId),
@@ -219,7 +240,7 @@ export class ArticleService {
    * @param field Le champ recherché avec sa valeur
    * @return Une requête pour firestore
    */
-  private getStructureQuery(field: { fieldPath: string, value: string }): object {
+  private getStructureQuery(field: { fieldPath: string, value: string, op: string }): object {
     return {
       structuredQuery: {
         from: [{
@@ -230,7 +251,7 @@ export class ArticleService {
             field: {
               fieldPath: field.fieldPath
             },
-            op: 'ARRAY_CONTAINS',
+            op: field.op,
             value: {
               stringValue: field.value
             }

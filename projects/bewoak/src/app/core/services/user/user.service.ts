@@ -22,7 +22,7 @@ export class UserService {
    * @param userId Identifiant de l'utilisateur
    * @return Une observable de User
    */
-  getUser(userId: string): Observable<User | null> {
+  public getUser(userId: string): Observable<User | null> {
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
     const req = this.getStructureQuery(userId);
     const httpOptions = {
@@ -45,7 +45,7 @@ export class UserService {
    * @param user Utilisateur courant
    * @return Une observable de User
    */
-  save(user: User): Observable<User | null> {
+  public save(user: User): Observable<User | null> {
     const url = `${environment.firestore.baseUrlDocument}users?key=${environment.firebase.apiKey}&documentId=${user.id}`;
     const dataUser = this.getDataUserForFirestore(user);
     const httpOptions = {
@@ -68,7 +68,7 @@ export class UserService {
    * @param user Utilisateur courant
    * @return Une observable de User
    */
-  update(user: User): Observable<User | null> {
+  public update(user: User): Observable<User | null> {
     // Configuration
     const url = `${environment.firestore.baseUrlDocument}users/${user.id}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
     const dataUser = this.getDataUserForFirestore(user);

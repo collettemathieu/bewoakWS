@@ -4,6 +4,7 @@ import { ArticleService } from '../../../core/services/article/article.service';
 import { CourseStateService } from '../../../core/services/course/course-state.service';
 import { Course } from '../../../shared/models/course';
 import { Article } from '../../../shared/models/article';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'bw-add-article-form',
@@ -12,9 +13,10 @@ import { Article } from '../../../shared/models/article';
 })
 export class AddArticleFormComponent implements OnInit {
 
+  public formArticle: FormGroup;
+  public article: BehaviorSubject<Article | null> = new BehaviorSubject(null);
   @Output()
   private closeModalArticle: EventEmitter<boolean> = new EventEmitter(false);
-  public formArticle: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -40,33 +42,71 @@ export class AddArticleFormComponent implements OnInit {
   }
 
   /**
-   * Validation du formulaire pour l'ajout d'un article au parcours pédagogique
+   * Prévisualisation des données de l'article
    */
-  public submit(): void {
+  public preview(): void {
     if (!this.formArticle.valid) {
       return;
     }
 
     this.articleService.getArticleFromDoi(this.doi.value).subscribe(
       article => {
-
-        const course: Course = this.courseStateService.getCurrentCourse();
-        const order = {};
-        order[course.id] = course.articles.length + 1;
-        article.courseIds = [course.id];
-        article.dateAdd = Date.now();
-        article.orderByCourseId = order;
-
-        // Ajout de l'article
-        this.articleService.addArticle(article).subscribe(
-          _ => this.courseStateService.getCourse(course.id).subscribe()
-        );
+        this.article.next(article);
       }
     );
+  }
 
-    // Fermeture de la fenêtre modale
-    this.closeModalArticle.emit(true);
+  /**
+   * Validation du formulaire pour l'ajout d'un article au parcours pédagogique.
+   * L'article est ajouté ou mis à jour selon son statut en bdd.
+   */
+  public submit(): void {
+    if (!this.formArticle.valid) {
+      return;
+    }
 
+    if (!this.article) {
+      return;
+    }
+    
+    this.articleService.getArticle(this.doi.value).subscribe(
+      article => {
+        if(article === null){
+          this.addArticle();
+        }
+      }
+    );
+  }
+
+  /**
+   * Annulation de la recherche
+   */
+  public cancel(): void {
+    this.article.next(null);
+  }
+
+  /**
+   * Ajout de l'article en cours de validation
+   */
+  private addArticle(): void {
+
+    const article = this.article.value;
+    const course: Course = this.courseStateService.getCurrentCourse();
+    const order = {};
+    order[course.id] = course.articles.length + 1;
+    article.courseIds = [course.id];
+    article.dateAdd = Date.now();
+    article.orderByCourseId = order;
+    article.doi = this.doi.value;
+
+    this.articleService.addArticle(article).subscribe(
+      _ => {
+        this.courseStateService.getCourse(course.id).subscribe();
+        this.article.next(null);
+        // Fermeture de la fenêtre modale
+        this.closeModalArticle.emit(true);
+      }
+    );
   }
 
   get doi() { return this.formArticle.get('doi'); }

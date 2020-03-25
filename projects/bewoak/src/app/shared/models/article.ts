@@ -4,8 +4,9 @@ type typeArticle = 'book' | 'article' | 'video' | 'other';
 type typeLevel = 'bac' | 'bac+1' | 'bac+2' | 'bac+3' | 'bac+4' | 'bac+5' | 'bac+>5';
 
 export class Article {
-    readonly id: string;
+    id: string;
     title: string;
+    doi: string;
     courseIds: Array<string>; // Id des parcours dans lequel l'article apparaît
     orderByCourseId: { [key: string]: number }; // Ordre d'apparition de l'article par Id de parcours
     avatarUrl: string;
@@ -22,6 +23,7 @@ export class Article {
 
     constructor(options: {
         id?: string,
+        doi: string,
         title: string,
         courseIds?: Array<string>,
         orderByCourseId?: { [key: string]: number },
@@ -39,6 +41,7 @@ export class Article {
     }) {
         this.id = options.id || '';
         this.title = options.title || '';
+        this.doi = options.doi || '';
         this.courseIds = options.courseIds || [];
         this.orderByCourseId = options.orderByCourseId || {};
         this.avatarUrl = options.avatarUrl || '';
