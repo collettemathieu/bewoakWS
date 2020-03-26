@@ -8,16 +8,18 @@ import { AddArticleFormComponent } from './add-article-form/add-article-form.com
 import { AddArticleModalComponent } from './add-article-modal/add-article-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ApiCrossRefServiceService } from '../../core/services/article/api-cross-ref-service.service';
+import { DoiService } from '../../core/services/article/doi.service';
+import { RemoveArticleComponent } from './remove-article/remove-article.component';
 
 
 @NgModule({
-  declarations: [AddArticleComponent, ViewArticleComponent, AddArticleFormComponent, AddArticleModalComponent],
+  declarations: [AddArticleComponent, ViewArticleComponent, AddArticleFormComponent, AddArticleModalComponent, RemoveArticleComponent],
   imports: [
     SharedModule,
     ReactiveFormsModule,
     ManageArticlesRoutingModule
   ],
-  providers: [ApiCrossRefServiceService],
+  providers: [ApiCrossRefServiceService, DoiService],
   exports: [AddArticleComponent, ViewArticleComponent],
   entryComponents: [AddArticleModalComponent]
 })

@@ -6,7 +6,6 @@ import { environment } from '../../../../environments/environment';
 import { ErrorService } from '../error.service';
 import { RandomService } from '../random.service';
 import { switchMap, catchError } from 'rxjs/operators';
-import { ApiCrossRefServiceService } from './api-cross-ref-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,22 +15,21 @@ export class ArticleService {
   constructor(
     private httpClient: HttpClient,
     private errorService: ErrorService,
-    private randomService: RandomService,
-    private ApiCrossRefService: ApiCrossRefServiceService
+    private randomService: RandomService
   ) { }
 
   /**
-   * Récupére l'ensemble des articles de la plateforme
+   * Récupére l'ensemble des articles de la plateforme.
    */
   public getArticles() {
     return of([]);
   }
 
   /**
-   * Retourne l'article s'il existe
-   * @param doi Identifiant de l'article
+   * Retourne l'article s'il existe à partir de son DOI.
+   * @param doi Identifiant de l'article.
    */
-  public getArticle(doi: string): Observable<Article | null> {
+  public getArticleByDoi(doi: string): Observable<Article | null> {
 
     const url = `${environment.firestore.baseUrlDocument}:runQuery?key=${environment.firebase.apiKey}`;
     const req = this.getStructureQuery({ fieldPath: 'doi', value: doi, op: 'EQUAL' });
@@ -40,12 +38,12 @@ export class ArticleService {
         'Content-Type': 'application/json'
       })
     };
-    return this.httpClient.post(url, req, httpOptions).pipe(
+    return this.httpClient.post<Article>(url, req, httpOptions).pipe(
       switchMap((data: any) => {
-        if(data.document){
+        if (data[0].document) {
           return of(this.getArticleFromFirestore(data[0].document.fields));
         }
-        return of(null);  
+        return of(null);
       }),
       catchError((error) => {
         return this.errorService.handleError(error);
@@ -53,9 +51,10 @@ export class ArticleService {
     );
   }
 
+
   /**
-   * Retourne l'ensemble des articles par ordre d'apparition d'un parcours pédagogique
-   * @param id Id du parcours pédagogique
+   * Retourne l'ensemble des articles par ordre d'apparition d'un parcours pédagogique.
+   * @param id Id du parcours pédagogique.
    */
   public getCourseArticles(id: string): Observable<Article[]> {
 
@@ -66,7 +65,7 @@ export class ArticleService {
         'Content-Type': 'application/json'
       })
     };
-    return this.httpClient.post(url, req, httpOptions).pipe(
+    return this.httpClient.post<Article[]>(url, req, httpOptions).pipe(
       switchMap((data: any) => {
         const articles: Array<Article> = [];
         data.forEach(element => {
@@ -82,40 +81,12 @@ export class ArticleService {
     );
   }
 
-  /**
-   * Retourne l'article à partir de son DOI
-   * @param id Identifiant DOI de l'article
-   */
-  public getArticleFromDoi(doi: string): Observable<Article | null> {
-    this.ApiCrossRefService.setOptions({
-      pid: environment.apiCrossRef.pid
-    });
-    return this.ApiCrossRefService.getArticleData(doi).pipe(
-      switchMap(data => {
-        return of(new Article({
-          doi,
-          title: data.title
-        }));
-      }),
-      catchError(error => {
-        return this.errorService.handleError({
-          error: {
-            error: {
-              message: error.statusText
-            }
-          }
-        });
-      })
-    );
-
-  }
 
   /**
-   * Ajout d'un article. Si l'article existe déjà, l'id du parcours pédaogique sera uniqument ajouté à son
-   * tableau d'ids.
-   * @param article L'article à ajouter
+   * Ajout d'un nouvel article.
+   * @param article L'article à ajouter.
    */
-  public addArticle(article: Article): Observable<Article> {
+  public add(article: Article): Observable<Article> {
     article.id = this.randomService.generateId();
     const url = `${environment.firestore.baseUrlDocument}articles?key=${environment.firebase.apiKey}&documentId=${article.id}`;
     const dataArticle = this.getDataArticleForFirestore(article);
@@ -134,9 +105,35 @@ export class ArticleService {
     );
   }
 
+
   /**
-   * Retourne les données de l'article pour le firestore
-   * @param article L'article
+   * Modification d'un article.
+   * @param article L'article à modifier.
+   */
+  public update(article: Article): Observable<Article | null> {
+    // Configuration
+    const url = `${environment.firestore.baseUrlDocument}articles/${article.id}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
+    const dataArticle = this.getDataArticleForFirestore(article);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    // Enregistrement en base
+    return this.httpClient.patch<Article>(url, dataArticle, httpOptions).pipe(
+      switchMap((data: any) => {
+        return of(this.getArticleFromFirestore(data.fields));
+      }),
+      catchError((error) => {
+        return this.errorService.handleError(error);
+      })
+    );
+  }
+
+  /**
+   * Retourne les données de l'article pour le firestore.
+   * @param article L'article à transformer.
    */
   private getDataArticleForFirestore(article: Article): object {
     return {
@@ -154,15 +151,16 @@ export class ArticleService {
             fields: this.getOrderByCourseIdDataForFirestore(article)
           }
         },
-        dateAdd: { integerValue: article.dateAdd }
+        dateAdd: { integerValue: article.dateAdd },
+        dateUpdate: { integerValue: article.dateUpdate }
       }
     };
   }
 
   /**
-   * Méthode pour la transformation des données du firestore vers l'article
-   * @param fields Champs retournés par le firestore
-   * @return Un article avec les données de firestore
+   * Méthode pour la transformation des données du firestore vers l'article.
+   * @param fields Champs retournés par le firestore.
+   * @return Un article avec les données du firestore.
    */
   private getArticleFromFirestore(fields: any): Article {
     return new Article({
@@ -171,14 +169,15 @@ export class ArticleService {
       title: fields.title.stringValue,
       courseIds: this.getCourseIdsDataFromFirestore(fields.courseIds),
       orderByCourseId: this.getOrderByCourseIdDataFromFirestore(fields.orderByCourseId),
-      dateAdd: fields.dateAdd.integerValue
+      dateAdd: fields.dateAdd.integerValue,
+      dateUpdate: fields.dateUpdate.integerValue
     });
   }
 
   /**
-   * Méthode pour la transformation des ids des parcours de l'article vers le firestore
-   * @param article L'article courant
-   * @return Un tableau de {stringValue: id}
+   * Méthode pour la transformation des ids des parcours de l'article vers le firestore.
+   * @param article L'article courant.
+   * @return Un tableau de {stringValue: id}.
    */
   private getCourseIdsDataForFirestore(article: Article): object {
     const courseIds = [];
@@ -191,9 +190,9 @@ export class ArticleService {
   }
 
   /**
-   * Méthode pour la transformation des ordres de l'article par parcours pédagogique vers le firestore
-   * @param article L'article courant
-   * @return Un tableau de {stringValue: id}
+   * Méthode pour la transformation des ordres de l'article par parcours pédagogique vers le firestore.
+   * @param article L'article courant.
+   * @return Un tableau de {stringValue: id}.
    */
   private getOrderByCourseIdDataForFirestore(article: Article): object {
     const orderBycourseId = {};
@@ -208,9 +207,9 @@ export class ArticleService {
   }
 
   /**
-   * Méthode pour la transformation des ids des parcours pédagogiques rendu par firestore vers l'article
-   * @param ids Ids formatés des parcours pédagogique de l'article courant
-   * @return Un tableau des ids des parcours pédagogiques de l'article
+   * Méthode pour la transformation des ids des parcours pédagogiques rendu par firestore vers l'article.
+   * @param ids Ids formatés des parcours pédagogique de l'article courant.
+   * @return Un tableau des ids des parcours pédagogiques de l'article.
    */
   private getCourseIdsDataFromFirestore(ids: any): Array<string> {
     const courseIds = [];
@@ -221,9 +220,9 @@ export class ArticleService {
   }
 
   /**
-   * Méthode pour la transformation des ordres par parcours pédagogique de l'article depuis le firestore vers l'article
-   * @param orders Ordre de l'article dans les parcours pédagogique formatés
-   * @return Un tableau des ordres de l'article par parcours pédagogique
+   * Méthode pour la transformation des ordres par parcours pédagogique de l'article depuis le firestore vers l'article.
+   * @param orders Ordre de l'article dans les parcours pédagogique formatés.
+   * @return Un tableau des ordres de l'article par parcours pédagogique.
    */
   private getOrderByCourseIdDataFromFirestore(orders: any): { [key: string]: number } {
     const orderBycourseId = {};
@@ -236,9 +235,9 @@ export class ArticleService {
   }
 
   /**
-   * Méthode pour le requêtage en base depuis firestore afin de récupérer les articles d'un parcours pédagogique
-   * @param field Le champ recherché avec sa valeur
-   * @return Une requête pour firestore
+   * Méthode pour le requêtage en base depuis firestore afin de récupérer les articles d'un parcours pédagogique.
+   * @param field Le champ recherché avec sa valeur.
+   * @return Une requête pour firestore.
    */
   private getStructureQuery(field: { fieldPath: string, value: string, op: string }): object {
     return {

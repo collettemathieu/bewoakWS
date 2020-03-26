@@ -5,6 +5,8 @@ import { CourseStateService } from '../../../core/services/course/course-state.s
 import { Course } from '../../../shared/models/course';
 import { Article } from '../../../shared/models/article';
 import { BehaviorSubject } from 'rxjs';
+import { DoiService } from '../../../core/services/article/doi.service';
+import { ToastrService } from '../../../core/services/toastr.service';
 
 @Component({
   selector: 'bw-add-article-form',
@@ -17,19 +19,23 @@ export class AddArticleFormComponent implements OnInit {
   public article: BehaviorSubject<Article | null> = new BehaviorSubject(null);
   @Output()
   private closeModalArticle: EventEmitter<boolean> = new EventEmitter(false);
+  private currentCourse: Course;
 
   constructor(
     private fb: FormBuilder,
     private articleService: ArticleService,
-    private courseStateService: CourseStateService
+    private courseStateService: CourseStateService,
+    private doiService: DoiService,
+    private toastrService: ToastrService
   ) { }
 
   ngOnInit() {
     this.formArticle = this.createForm();
+    this.currentCourse = this.courseStateService.getCurrentCourse();
   }
 
   /**
-   * Création du formulaire pour l'ajout d'un article au parcours pédagogique
+   * Création du formulaire pour l'ajout d'un article au parcours pédagogique.
    */
   private createForm(): FormGroup {
     return this.fb.group({
@@ -42,18 +48,25 @@ export class AddArticleFormComponent implements OnInit {
   }
 
   /**
-   * Prévisualisation des données de l'article
+   * Prévisualisation des données de l'article sélection par son DOI.
    */
   public preview(): void {
     if (!this.formArticle.valid) {
       return;
     }
 
-    this.articleService.getArticleFromDoi(this.doi.value).subscribe(
+    this.doiService.getArticleByDoi(this.doi.value).subscribe(
       article => {
         this.article.next(article);
       }
     );
+  }
+
+  /**
+   * Annulation de la prévisualisation de l'article.
+   */
+  public cancel(): void {
+    this.article.next(null);
   }
 
   /**
@@ -68,40 +81,66 @@ export class AddArticleFormComponent implements OnInit {
     if (!this.article) {
       return;
     }
-    
-    this.articleService.getArticle(this.doi.value).subscribe(
+
+    this.articleService.getArticleByDoi(this.doiService.extractDoi(this.doi.value)).subscribe(
       article => {
-        if(article === null){
+        if (article === null) {
           this.addArticle();
+        } else {
+          this.updateArticle(article);
         }
       }
     );
   }
 
   /**
-   * Annulation de la recherche
-   */
-  public cancel(): void {
-    this.article.next(null);
-  }
-
-  /**
-   * Ajout de l'article en cours de validation
+   * Ajout de l'article en cours de validation.
    */
   private addArticle(): void {
 
     const article = this.article.value;
-    const course: Course = this.courseStateService.getCurrentCourse();
-    const order = {};
-    order[course.id] = course.articles.length + 1;
-    article.courseIds = [course.id];
-    article.dateAdd = Date.now();
-    article.orderByCourseId = order;
-    article.doi = this.doi.value;
 
-    this.articleService.addArticle(article).subscribe(
+    const order = {};
+    order[this.currentCourse.id] = this.currentCourse.articles.length + 1;
+    article.courseIds = [this.currentCourse.id];
+    article.dateAdd = Date.now();
+    article.dateUpdate = Date.now();
+    article.orderByCourseId = order;
+    article.doi = this.doiService.extractDoi(this.doi.value);
+
+    this.articleService.add(article).subscribe(
       _ => {
-        this.courseStateService.getCourse(course.id).subscribe();
+        this.courseStateService.getCourse(this.currentCourse.id).subscribe();
+        this.article.next(null);
+        // Fermeture de la fenêtre modale
+        this.closeModalArticle.emit(true);
+      }
+    );
+  }
+
+  /**
+   * Modification de l'article en cours de validation.
+   */
+  private updateArticle(article: Article): void {
+
+    // Un article ne peut être associé plusieurs fois à un même parcours.
+    if (article.courseIds.includes(this.currentCourse.id)) {
+      this.toastrService.showMessage({
+        type: 'info',
+        message: 'Vous ne pouvez pas ajouter plusieurs fois le même article dans un même parcours.'
+      });
+      // Fermeture de la fenêtre modale
+      this.closeModalArticle.emit(true);
+      return;
+    }
+    article.orderByCourseId[this.currentCourse.id] = this.currentCourse.articles.length + 1;
+    article.courseIds.push(this.currentCourse.id);
+    article.dateUpdate = Date.now();
+    article.doi = this.doiService.extractDoi(this.doi.value);
+
+    this.articleService.update(article).subscribe(
+      _ => {
+        this.courseStateService.getCourse(this.currentCourse.id).subscribe();
         this.article.next(null);
         // Fermeture de la fenêtre modale
         this.closeModalArticle.emit(true);

@@ -12,6 +12,7 @@ export class Article {
     avatarUrl: string;
     linkUrl: string; // Lien url de l'article
     dateAdd: number; // Date d'ajout de l'article en base
+    dateUpdate: number; // Date de modification de l'article en base
     releaseDate: number; // Date de publication de l'article
     type: typeArticle;
     keywords: string;
@@ -23,13 +24,14 @@ export class Article {
 
     constructor(options: {
         id?: string,
-        doi: string,
+        doi?: string,
         title: string,
         courseIds?: Array<string>,
         orderByCourseId?: { [key: string]: number },
         avatarUrl?: string,
         linkUrl?: string,
         dateAdd?: number,
+        dateUpdate?: number,
         releaseDate?: number,
         type?: typeArticle,
         keywords?: string,
@@ -47,6 +49,7 @@ export class Article {
         this.avatarUrl = options.avatarUrl || '';
         this.linkUrl = options.linkUrl || '';
         this.dateAdd = options.dateAdd || 0;
+        this.dateUpdate = options.dateUpdate || 0;
         this.releaseDate = options.releaseDate || 0;
         this.type = options.type || 'other';
         this.keywords = options.keywords || '';
