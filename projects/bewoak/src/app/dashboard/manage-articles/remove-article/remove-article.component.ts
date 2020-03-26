@@ -19,19 +19,20 @@ export class RemoveArticleComponent {
   ) { }
 
   public remove(): void {
-    const article = this.article;
     const course = this.courseStateService.getCurrentCourse();
-    const index = article.courseIds.findIndex((element) => {
+    const index = this.article.courseIds.findIndex((element) => {
       return element === course.id;
     });
-    console.log(index);
     if(index !== -1){
-      this.article.courseIds.slice(index, 1);
-      console.log(this.article);
+      this.article.courseIds.splice(index, 1);
     }
-    delete article.orderByCourseId[course.id];
+    delete this.article.orderByCourseId[course.id];
       
-    this.articleService.update(article);
+    this.articleService.update(this.article).subscribe(
+      _ => {
+        this.courseStateService.getCourse(course.id).subscribe();
+      }
+    );
   }
 
 }
