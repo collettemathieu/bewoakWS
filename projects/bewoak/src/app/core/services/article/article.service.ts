@@ -18,12 +18,6 @@ export class ArticleService {
     private randomService: RandomService
   ) { }
 
-  /**
-   * Récupére l'ensemble des articles de la plateforme.
-   */
-  public getArticles() {
-    return of([]);
-  }
 
   /**
    * Retourne l'article s'il existe à partir de son DOI.

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/user/auth.service';
 import { Subscription } from 'rxjs';
 import { User } from '../../../shared/models/user';
 
@@ -15,7 +15,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   public user: User;
 
   public homePath = 'home';
-  public catalogPath = 'catalog';
   public dashboardPath = 'dashboard';
   public loginPath = 'login';
   public adminPath = 'administration';

@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Course } from '../../../../shared/models/course';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '../../../../core/services/user/auth.service';
 import { User } from '../../../../shared/models/user';
 import { CoursesStateUserService } from '../../../../core/services/course/courses-state-user.service';
 import { CheckCourseNameValidator } from '../../../../shared/validators/check-course-name.validator';

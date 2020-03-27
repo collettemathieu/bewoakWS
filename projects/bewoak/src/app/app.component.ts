@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './core/services/auth.service';
+import { AuthService } from './core/services/user/auth.service';
 
 @Component({
   selector: 'bw-root',

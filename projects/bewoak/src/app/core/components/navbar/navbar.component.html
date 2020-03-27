@@ -2,9 +2,6 @@
     <a class="navbar-brand" (click)="navigate(homePath)">Bewoak</a>
 
     <ul class="navbar-nav mr-auto">
-        <li [class.active]='isActive(catalogPath)' class="nav-item">
-            <a class="nav-link" (click)="navigate(catalogPath)">Catalogue</a>
-        </li>
         <li *ngIf="user?.hasRole('EXPERT')" dropdown class="nav-item dropdown">
             <a dropdownToggle [class.active]='isActive(dashboardPath)' class="nav-link dropdown-toggle"
                 id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

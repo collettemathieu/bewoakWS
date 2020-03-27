@@ -1,12 +1,12 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ArticleService } from '../../../core/services/article/article.service';
-import { CourseStateService } from '../../../core/services/course/course-state.service';
-import { Course } from '../../../shared/models/course';
-import { Article } from '../../../shared/models/article';
+import { ArticleService } from '../../../../core/services/article/article.service';
+import { CourseStateService } from '../../../../core/services/course/course-state.service';
+import { Course } from '../../../../shared/models/course';
+import { Article } from '../../../../shared/models/article';
 import { BehaviorSubject } from 'rxjs';
-import { DoiService } from '../../../core/services/article/doi.service';
-import { ToastrService } from '../../../core/services/toastr.service';
+import { DoiService } from '../../../../core/services/article/doi.service';
+import { ToastrService } from '../../../../core/services/toastr.service';
 
 @Component({
   selector: 'bw-add-article-form',

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { AddArticleModalComponent } from '../add-article-modal/add-article-modal.component';
+import { AddArticleModalComponent } from '../add-article/add-article-modal/add-article-modal.component';
 
 @Component({
   selector: 'bw-add-article',

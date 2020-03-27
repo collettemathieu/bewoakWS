@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { User } from '../../../shared/models/user';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/user/auth.service';
 
 @Component({
   selector: 'bw-account-form',

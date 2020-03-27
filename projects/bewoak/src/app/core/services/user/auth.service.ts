@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { User } from '../../shared/models/user';
+import { User } from '../../../shared/models/user';
 import { HttpClient, HttpHeaders, HttpBackend } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { switchMap, catchError, tap, finalize, delay } from 'rxjs/operators';
-import { UserService } from './user/user.service';
-import { ToastrService } from './toastr.service';
-import { ErrorService } from './error.service';
-import { LoaderService } from './loader.service';
+import { UserService } from '../user/user.service';
+import { ToastrService } from '../toastr.service';
+import { ErrorService } from '../error.service';
+import { LoaderService } from '../loader.service';
 import { Router } from '@angular/router';
 
 @Injectable({

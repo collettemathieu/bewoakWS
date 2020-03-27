@@ -31,14 +31,12 @@
             </button>
         </div>
         <div *ngIf="article.value" class="form-group form-row">
-            <div class="ml-auto">
-                <button (click)="cancel()" class="btn btn-primary mb-2">
-                    Annuler
-                </button>
-                <button (click)="submit()" class="btn btn-dark mb-2" [disabled]="!formArticle.valid">
-                    Valider
-                </button>
-            </div>
+            <button (click)="cancel()" class="btn btn-primary mb-2">
+                Annuler
+            </button>
+            <button (click)="submit()" class="btn btn-success mb-2 ml-auto" [disabled]="!formArticle.valid">
+                Valider
+            </button>
         </div>
     </form>
 </div>

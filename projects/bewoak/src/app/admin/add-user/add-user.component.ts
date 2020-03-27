@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../core/services/user/auth.service';
 import { RandomService } from '../../core/services/random.service';
 import { FormUserService } from '../../core/services/user/form-user.service';
 import { User } from '../../shared/models/user';

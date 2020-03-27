@@ -5,7 +5,7 @@ import { take } from 'rxjs/operators';
 import { timer, Subscription } from 'rxjs';
 
 // Temps de vie d'un toastr (en ms)
-const lifeTime = 5000;
+const lifeTime = 7000;
 
 @Component({
   selector: 'bw-toastr',

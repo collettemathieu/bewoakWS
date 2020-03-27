@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Course } from '../../../../shared/models/course';
+import { Course } from '../../../shared/models/course';
 import { Router } from '@angular/router';
 
 @Component({
