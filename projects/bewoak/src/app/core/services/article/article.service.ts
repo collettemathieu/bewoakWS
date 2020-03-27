@@ -112,7 +112,6 @@ export class ArticleService {
    */
   public update(article: Article): Observable<Article | null> {
     // Configuration
-    console.log(article);
     const url = `${environment.firestore.baseUrlDocument}articles/${article.id}?key=${environment.firebase.apiKey}&currentDocument.exists=true`;
     const dataArticle = this.getDataArticleForFirestore(article);
     const httpOptions = {

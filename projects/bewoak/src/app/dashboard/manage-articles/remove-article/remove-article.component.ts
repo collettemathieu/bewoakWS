@@ -18,16 +18,19 @@ export class RemoveArticleComponent {
     private courseStateService: CourseStateService
   ) { }
 
+  /**
+   * Suppression logique d'un article du parcours pédagogique en cours.
+   */
   public remove(): void {
     const course = this.courseStateService.getCurrentCourse();
     const index = this.article.courseIds.findIndex((element) => {
       return element === course.id;
     });
-    if(index !== -1){
+    if (index !== -1) {
       this.article.courseIds.splice(index, 1);
     }
     delete this.article.orderByCourseId[course.id];
-      
+
     this.articleService.update(this.article).subscribe(
       _ => {
         this.courseStateService.getCourse(course.id).subscribe();
