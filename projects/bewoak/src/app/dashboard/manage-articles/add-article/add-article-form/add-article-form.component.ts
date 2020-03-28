@@ -54,7 +54,6 @@ export class AddArticleFormComponent implements OnInit {
     if (!this.formArticle.valid) {
       return;
     }
-
     this.doiService.getArticleByDoi(this.doi.value).subscribe(
       article => {
         this.article.next(article);

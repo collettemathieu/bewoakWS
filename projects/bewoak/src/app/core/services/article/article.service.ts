@@ -207,6 +207,9 @@ export class ArticleService {
    */
   private getCourseIdsDataFromFirestore(ids: any): Array<string> {
     const courseIds = [];
+    if(!ids.arrayValue.values){
+      return courseIds;
+    }
     ids.arrayValue.values.forEach(value => {
       courseIds.push(value.stringValue);
     });
